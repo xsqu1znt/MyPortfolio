@@ -1,5 +1,5 @@
 import ServiceCard from "@/components/cards/ServiceCard";
-import SectionHeader from "@/components/ui/SectionHeader";
+import SectionHeader from "@/components/layout/SectionHeader";
 import { AddonServices, MainServices } from "@/constants/services";
 import { ChevronRight } from "lucide-react";
 
@@ -9,7 +9,7 @@ export default function ExtraServices() {
             <SectionHeader title="EXTRA //" description="Looking for a specific service?" align="right" />
 
             {/* Extra Service/Container */}
-            <div className="flex flex-col">
+            <div className="bg-foreground-dimmer divide-foreground-dimmer flex flex-col divide-y overflow-hidden rounded-md">
                 {AddonServices.map((service, i) => (
                     <ServiceCard key={i} index={i + 1 + MainServices.length} {...service} />
                 ))}

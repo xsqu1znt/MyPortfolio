@@ -12,7 +12,7 @@ export default function ServiceCard({
     extraDetails
 }: ServiceCardProps) {
     return (
-        <div className="border-foreground-dimmer flex flex-col gap-3 border-b px-4 py-6">
+        <div className="flex flex-col gap-3 px-4 py-6">
             {/* Service/Title */}
             <div className="flex gap-3">
                 <span className="text-xs tracking-tighter">{`${index}`.padStart(3, "0")}</span>
@@ -22,7 +22,7 @@ export default function ServiceCard({
             {/* Service/Description */}
             <div>
                 {description.map(desc => (
-                    <p key={desc} className="text-sm font-light tracking-wide">
+                    <p key={desc} className="font-light tracking-wide">
                         {desc}
                     </p>
                 ))}

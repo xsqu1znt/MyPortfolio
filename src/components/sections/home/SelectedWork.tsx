@@ -1,5 +1,5 @@
 import ShowreelCard from "@/components/cards/ShowreelCard";
-import SectionHeader from "@/components/ui/SectionHeader";
+import SectionHeader from "@/components/layout/SectionHeader";
 
 export default function SelectedWork() {
     return (

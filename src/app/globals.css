@@ -57,7 +57,7 @@ body {
 
 /* Make the thumb thinner */
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 1);
     border-radius: 4px;
     border: none;
     height: 8px;
