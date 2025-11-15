@@ -1,6 +1,8 @@
 "use client";
 
+import { useUserClient } from "@/hooks/useUserClient";
 import { cn } from "@/lib/utils";
+import { useLenis } from "lenis/react";
 import { ComponentProps, HTMLInputTypeAttribute, useRef } from "react";
 
 export default function TextInput({
@@ -12,15 +14,16 @@ export default function TextInput({
     className,
     ...props
 }: ComponentProps<"div"> & { type?: HTMLInputTypeAttribute; area?: boolean; label: string; placeholder: string }) {
+    const lenis = useLenis();
     const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
+    const { isMobile } = useUserClient();
 
     const handleFocus = () => {
+        if (!isMobile) return;
+
         if (inputRef.current) {
             setTimeout(() => {
-                inputRef.current?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
+                lenis?.scrollTo(inputRef.current as any, { offset: -200, duration: 1 });
             }, 100);
         }
     };

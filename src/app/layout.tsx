@@ -5,6 +5,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import ReactLenis from "lenis/react";
 import Footer from "@/components/layout/Footer";
+import SmoothCursor from "@/components/common/SmoothCursor";
 
 const workSans = Work_Sans({
     variable: "--font-work-sans",
@@ -93,6 +94,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={`dark antialiased ${workSans.variable} ${nunito.variable} ${satoshi.variable}`}>
                 <ReactLenis root options={{ lerp: 0.2 }} />
+                {/* <SmoothCursor /> */}
                 <Navbar />
                 {children}
                 <Footer />

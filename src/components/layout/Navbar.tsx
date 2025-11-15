@@ -45,7 +45,7 @@ export default function Navbar() {
     };
 
     const handleScrollContact = () => {
-        lenis?.scrollTo("#contact");
+        lenis?.scrollTo("#contact", { offset: -100 });
     };
 
     return (

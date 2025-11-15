@@ -11,7 +11,7 @@ export default function Contact() {
             <SectionHeader title="// CONTACT" description="Let's get your business the attention it needs." />
 
             {/* Form/Contact */}
-            <div className="mb-32 flex flex-col gap-8">
+            <div className="flex flex-col gap-8">
                 {/* Field/Project Type */}
                 <div className="flex flex-col gap-1">
                     <label htmlFor="ssm-project-type" className="text-foreground-dim ml-2 text-xs tracking-tight">

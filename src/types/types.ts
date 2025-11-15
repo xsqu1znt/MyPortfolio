@@ -9,6 +9,6 @@ export interface ServiceCardProps {
         perPage?: string;
     };
 
+    extraDetails: string[];
     handleContact?: () => void;
-    extraDetails?: string;
 }
