@@ -76,7 +76,7 @@ export default function Navbar() {
                         onTouchMove={handleMenuMouseEnter}
                     >
                         {/* Hamburger */}
-                        <div className="-mx-1 px-1 py-3 hover:cursor-pointer">
+                        <div className="-mx-1 cursor-pointer px-1 py-3">
                             <div
                                 className={cn(
                                     "relative h-3.5 w-6 transition-all duration-300",
@@ -114,7 +114,7 @@ export default function Navbar() {
                 <div className={"absolute top-4 right-4 z-[-1] overflow-y-hidden"}>
                     <button
                         className={cn(
-                            "shade-3d flex h-[50px] items-center rounded-md border border-white/5 bg-white/5 px-4 py-2.5 backdrop-blur-xl transition-all duration-300 hover:cursor-pointer",
+                            "shade-3d flex h-[50px] cursor-pointer items-center rounded-md border border-white/5 bg-white/5 px-4 py-2.5 backdrop-blur-xl transition-all duration-300",
                             isFull && "-translate-y-16"
                         )}
                         onClick={handleScrollContact}

@@ -93,7 +93,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`dark antialiased ${workSans.variable} ${nunito.variable} ${satoshi.variable}`}>
-                <ReactLenis root options={{ lerp: 0.15 }} />
+                <ReactLenis root options={{ lerp: 0.15, allowNestedScroll: true }} />
                 {/* <SmoothCursor /> */}
                 <Navbar />
                 {children}

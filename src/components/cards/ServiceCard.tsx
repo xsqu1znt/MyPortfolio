@@ -28,13 +28,13 @@ function ServiceHeader({
             >
                 <div
                     className={cn(
-                        "absolute top-1/2 left-1/2 h-px w-4 -translate-x-1/2 -translate-y-1/2 rotate-90 bg-[#7c7c81] transition-all duration-300",
+                        "absolute top-1/2 left-1/2 h-[1.5px] w-4 -translate-x-1/2 -translate-y-1/2 rotate-90 bg-[#7c7c81] transition-all duration-300",
                         expanded && "bg-icon-active rotate-0"
                     )}
                 />
                 <div
                     className={cn(
-                        "absolute top-1/2 left-1/2 h-px w-4 -translate-x-1/2 -translate-y-1/2 bg-[#7c7c81] transition-all duration-300",
+                        "absolute top-1/2 left-1/2 h-[1.5px] w-4 -translate-x-1/2 -translate-y-1/2 bg-[#7c7c81] transition-all duration-300",
                         expanded && "bg-icon-active"
                     )}
                 />
@@ -110,7 +110,7 @@ function ServiceExtra({ extraDetails, handleContact, expanded }: ServiceCardProp
             </ul>
 
             {/* Contact Me Button (Replaces price/subtext area) */}
-            <Button label="START A PROJECT" variant="accent" full className="mt-3" onClick={handleContact}>
+            <Button label="GET STARTED" variant="accent" full className="mt-2" onClick={handleContact}>
                 <ArrowRight className="text-background-primary size-5 stroke-[1.5px]" />
             </Button>
         </div>

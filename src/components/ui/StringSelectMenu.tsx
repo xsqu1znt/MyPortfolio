@@ -1,127 +1,171 @@
+import { useHandleClickOutside } from "@/hooks/useHandleClickOutside";
+import { cn } from "@/lib/utils";
+import { ChevronDown } from "lucide-react";
+import { motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { NoTouchPropagation } from "../common/NoTouchPropagation";
+
 export type StringSelectStyles = "primary";
-export type StringSelectSizes = "sm" | "md" | "lg";
+export type StringSelectSizes = "normal";
 
 export interface StringSelectMenuOption {
     id: string;
     label: string;
-    description?: string;
+    description?: string | string[];
 }
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    isLoading?: boolean;
+    label?: string;
     placeholder?: string;
     variant?: StringSelectStyles;
     direction?: "top" | "bottom";
     size?: StringSelectSizes;
     options: StringSelectMenuOption[];
+    full?: boolean;
     onOptionSelect?: (option: StringSelectMenuOption) => void;
 }
 
-import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
-import { NoTouchPropagation } from "../common/NoTouchPropagation";
-
 // prettier-ignore
 export const stringSelectStyles: Record<StringSelectStyles, string> = {
-    primary: "border border-white/5 bg-foreground-dimmer hover:bg-foreground-dim active:bg-foreground-dim focus:bg-foreground-dim",
+    primary: "border border-white/5 bg-foreground-dimmer hover:bg-white/15 focus:bg-white/15",
 };
 
 export const stringSelectSizes: Record<StringSelectSizes, string> = {
-    sm: "px-4 py-2 gap-4",
-    md: "px-6 py-3 gap-6",
-    lg: "px-6 py-3 gap-12"
+    normal: "px-6 py-3 gap-6"
 };
 
 export const stringSelectMinWidths: Record<StringSelectSizes, string> = {
-    sm: "min-w-40",
-    md: "min-w-50",
-    lg: "min-w-60"
+    normal: "min-w-50"
 };
 
 export const stringSelectTextSizes: Record<StringSelectSizes, string> = {
-    sm: "text-sm",
-    md: "text-base",
-    lg: "text-lg"
+    normal: "text-base"
 };
 
 /* TODO: Add keyboard support. */
-export default function StringSelectMenu(props: Props) {
-    const { isLoading, onOptionSelect, ...rest } = props;
+export default function StringSelectMenu({
+    id,
+    label,
+    placeholder,
+    options,
+    size,
+    variant,
+    direction,
+    full,
+    onOptionSelect,
+    className,
+    ...props
+}: Props) {
+    const styleVariant = stringSelectStyles[variant || "primary"];
+    const styleSize = stringSelectSizes[size || "normal"];
+    const styleMinWidth = stringSelectMinWidths[size || "normal"];
+    const styleTextSize = stringSelectTextSizes[size || "normal"];
 
-    const styleVariant = stringSelectStyles[props.variant || "primary"];
-    const styleSize = stringSelectSizes[props.size || "md"];
-    const styleMinWidth = stringSelectMinWidths[props.size || "md"];
-    const styleTextSize = stringSelectTextSizes[props.size || "md"];
+    const [selected, setSelected] = useState<StringSelectMenuOption | null>(placeholder ? null : options[0]);
+    const [isOpen, setIsOpen] = useState(false);
+    const buttonRef = useRef<HTMLDivElement>(null);
+    useHandleClickOutside(buttonRef, () => setIsOpen(false));
 
-    const [selected, setSelected] = useState<StringSelectMenuOption | null>(props.placeholder ? null : props.options[0]);
-    const [open, setOpen] = useState(false);
-    const menuRef = useRef<HTMLDivElement>(null);
-
-    // Close the menu if clicked anywhere outside
     useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-                setOpen(false);
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (!isOpen) return;
+
+            switch (e.key) {
+                case "Escape":
+                    setIsOpen(false);
+                    break;
             }
         };
 
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
+        document.addEventListener("keydown", handleKeyDown);
+        return () => document.removeEventListener("keydown", handleKeyDown);
     }, []);
 
-    return (
-        <div className={cn(`relative ${isLoading && "loadingGlow"}`, props.className)} ref={menuRef}>
-            <button
-                {...rest}
-                className={cn(
-                    `flex w-fit cursor-pointer items-center justify-between rounded-md ease-in-out ${props.disabled && "pointer-events-none opacity-50"} ${open ? (props.direction === "top" ? "rounded-t-none" : "rounded-b-none") : ""} h-[50px] px-6 py-3 text-base transition-[colors,border-radius] duration-300 outline-none`,
-                    styleVariant,
-                    styleSize,
-                    styleMinWidth,
-                    styleTextSize,
-                    props.className
-                )}
-                onClick={() => setOpen(!open)}
-            >
-                <span className={`text-nowrap ${!selected && props.placeholder && "text-foreground-dim"}`}>
-                    {!selected && props.placeholder ? props.placeholder : selected?.label}
-                </span>
-                <svg
-                    className={`size-4 transform-[colors,rotate] duration-300 ease-in-out ${open ? (props.direction === "top" ? "rotate-0" : "rotate-180") : props.direction === "top" ? "rotate-180" : "rotate-0"}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
+    const toggleOpen = () => {
+        setIsOpen(prev => !prev);
+    };
 
-            {open && (
-                <NoTouchPropagation>
-                    <div
-                        className={cn(
-                            `dropdown no-scrollbar absolute z-10 max-h-[201px] w-fit touch-pan-y overflow-x-hidden overflow-y-auto scroll-smooth ${props.direction === "top" ? "bottom-full rounded-t-md border-b-0" : "top-full rounded-b-md border-t-0"} bg-background-primary border border-white/25`,
-                            styleMinWidth,
-                            styleTextSize,
-                            props.className
-                        )}
-                    >
-                        {props.options.map((option, idx) => (
-                            <div
-                                key={idx}
-                                onClick={() => {
-                                    setSelected(option);
-                                    onOptionSelect?.(option);
-                                    setOpen(false);
-                                }}
-                                className={`border-foreground-dimmer text-foreground-primary w-full cursor-pointer border-b px-4 py-3 hover:bg-white/10 focus:bg-white/10 active:bg-white/10 ${selected?.id === option.id && "bg-white/10"}`}
-                            >
-                                {option.label}
-                            </div>
-                        ))}
+    return (
+        <div ref={buttonRef} className={cn("flex flex-col gap-1", full && "w-full")}>
+            <label htmlFor={id} className="text-foreground-dim ml-2 text-xs tracking-tight">
+                {label}
+            </label>
+
+            <div className={cn("relative", full && "w-full")}>
+                <button
+                    id={id}
+                    className={cn(
+                        `group relative flex w-fit cursor-pointer items-center justify-between rounded-md px-4 py-3 transition-all duration-300`,
+                        styleVariant,
+                        styleSize,
+                        styleMinWidth,
+                        styleTextSize,
+                        full && "w-full",
+                        isOpen && (direction === "top" ? "rounded-t-none" : "rounded-b-none"),
+                        isOpen && "border-transparent",
+                        className
+                    )}
+                    onClick={toggleOpen}
+                >
+                    <span className={cn("text-nowrap")}>{!selected && placeholder ? placeholder : selected?.label}</span>
+                    <div className={"relative -mr-2 size-7"}>
+                        <ChevronDown
+                            className={cn(
+                                "absolute top-1/2 left-1/2 size-7 -translate-x-1/2 -translate-y-1/2 stroke-[1.5px] transition-all duration-300 group-hover:size-8",
+                                direction === "top" && "rotate-180",
+                                isOpen && "text-icon-active",
+                                isOpen && (direction === "top" ? "rotate-0" : "rotate-180")
+                            )}
+                        />
                     </div>
-                </NoTouchPropagation>
-            )}
+                </button>
+
+                {isOpen && (
+                    <NoTouchPropagation>
+                        <motion.ul
+                            className={cn(
+                                "no-scrollbar divide-foreground-dimmer absolute z-10 max-h-52 w-full touch-pan-y divide-y overflow-x-hidden overflow-y-auto scroll-smooth border border-white/5 bg-[#141312]",
+                                direction === "top"
+                                    ? "bottom-full border-b-transparent"
+                                    : "top-full rounded-b-md border-t-transparent"
+                            )}
+                            initial={{ opacity: 0, y: direction === "top" ? 10 : -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, ease: "circInOut" }}
+                        >
+                            {options.map((opt, i) => {
+                                const handleSelect = () => {
+                                    setSelected(opt);
+                                    onOptionSelect?.(opt);
+                                    setIsOpen(false);
+                                };
+
+                                return (
+                                    <li
+                                        key={i}
+                                        onClick={handleSelect}
+                                        className={cn(
+                                            "text-foreground-primary w-full cursor-pointer px-4 py-3 transition-all duration-300 hover:bg-white/5 focus:bg-white/5",
+                                            selected?.id === opt.id && "bg-white/10"
+                                        )}
+                                    >
+                                        {opt.label}
+                                        {opt.description && Array.isArray(opt.description) ? (
+                                            opt.description.map((d, i) => (
+                                                <p key={i} className="text-foreground-dim text-xs">
+                                                    {d}
+                                                </p>
+                                            ))
+                                        ) : (
+                                            <p className="text-foreground-dim text-xs">{opt.description}</p>
+                                        )}
+                                    </li>
+                                );
+                            })}
+                        </motion.ul>
+                    </NoTouchPropagation>
+                )}
+            </div>
         </div>
     );
 }
