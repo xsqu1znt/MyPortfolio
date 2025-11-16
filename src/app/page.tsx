@@ -7,7 +7,7 @@ import FAQs from "@/components/sections/home/FAQs";
 
 export default function Home() {
     return (
-        <main className="font-nunito flex min-h-screen min-w-[320px] flex-col gap-32 overflow-x-hidden">
+        <main className="font-nunito flex min-h-screen min-w-[320px] flex-col gap-32">
             <Hero />
             <SelectedWork />
             <Services />

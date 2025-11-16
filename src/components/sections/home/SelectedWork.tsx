@@ -7,7 +7,7 @@ export default function SelectedWork() {
             <SectionHeader title="// SELECTED WORK" description="Some of my favorite pieces." />
 
             {/* Showreel/Container */}
-            <div className="relative mt-9 w-full">
+            <div className="relative mt-9 w-full overflow-hidden">
                 <div className="relative flex w-full -translate-x-32 gap-4">
                     {/* Align/Left */}
                     <div className="flex flex-col gap-4">

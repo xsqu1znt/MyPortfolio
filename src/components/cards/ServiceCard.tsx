@@ -17,7 +17,7 @@ function ServiceHeader({
         <button className="flex justify-between" onClick={toggleExpanded}>
             <div className="flex gap-3">
                 <span className="text-foreground-dim text-xs tracking-tighter">{`${index}`.padStart(3, "0")}</span>
-                <h3 className="text-3xl">{title}</h3>
+                <h3 className="text-2xl">{title}</h3>
             </div>
 
             <div
