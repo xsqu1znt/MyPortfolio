@@ -92,8 +92,6 @@ export default function FAQs() {
     return (
         <section id="faqs" className="section">
             <SectionHeader title="// FAQs" description="Let's keep it simple." />
-
-            {/* Container/FAQ */}
             <FAQList />
         </section>
     );

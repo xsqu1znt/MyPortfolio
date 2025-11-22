@@ -89,7 +89,7 @@ export default function Footer() {
     const lenis = useLenis();
 
     const scrollToTop = () => {
-        lenis?.scrollTo(0);
+        lenis?.scrollTo(0, { duration: 1 });
     };
 
     return (

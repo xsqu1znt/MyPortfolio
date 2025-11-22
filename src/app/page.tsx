@@ -1,16 +1,18 @@
+import Branding from "@/components/sections/home/Branding";
 import Contact from "@/components/sections/home/Contact";
 import Contact_Screen from "@/components/sections/home/Contact_Screen";
 import ExtraServices from "@/components/sections/home/ExtraServices";
 import FAQs from "@/components/sections/home/FAQs";
 import Hero from "@/components/sections/home/Hero";
-import SelectedWork from "@/components/sections/home/SelectedWork";
+import FeaturedWork from "@/components/sections/home/FeaturedWork";
 import Services from "@/components/sections/home/Services";
 
 export default function Home() {
     return (
-        <main className="font-nunito flex min-h-screen min-w-[320px] flex-col gap-32">
+        <main className="font-nunito flex min-h-screen min-w-[320px] flex-col">
             <Hero />
-            <SelectedWork />
+            <FeaturedWork />
+            <Branding />
             <Services />
             <ExtraServices />
             <Contact_Screen />

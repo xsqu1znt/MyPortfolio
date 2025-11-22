@@ -5,11 +5,13 @@ import useViewportSize from "@/hooks/useViewportSize";
 import { cn } from "@/lib/utils";
 import { useLenis } from "lenis/react";
 import { ChevronRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
 
 export default function Navbar() {
     const lenis = useLenis();
 
+    const [hidden, setHidden] = useState(false);
     const [isFull, setIsFull] = useState(false);
     const [menuClicked, setMenuClicked] = useState(false);
     const [menuHovered, setMenuHovered] = useState(false);
@@ -17,10 +19,32 @@ export default function Navbar() {
 
     const { viewportHeight } = useViewportSize();
     const { scrollY } = useScroll();
+    const lastScrollPositionY = useRef<number>(0);
 
     useEffect(() => {
         if (!scrollY || !viewportHeight) return;
         setIsFull(scrollY >= viewportHeight);
+
+        if (!scrollY) {
+            setHidden(false);
+        } else {
+            // Scrolling downwards
+            if (scrollY > lastScrollPositionY.current) {
+                if (!hidden) {
+                    setTimeout(() => {
+                        setHidden(true);
+                    }, 250);
+                }
+            }
+            // Scrolling upwards
+            else {
+                if (hidden) {
+                    setHidden(false);
+                }
+            }
+        }
+
+        lastScrollPositionY.current = scrollY;
     }, [scrollY, viewportHeight]);
 
     const handleMenuToggle = () => {
@@ -45,12 +69,17 @@ export default function Navbar() {
     };
 
     const handleScrollContact = () => {
-        lenis?.scrollTo("#contact", { offset: -100 });
+        lenis?.scrollTo("#contact", { offset: -100, duration: 2 });
     };
 
     return (
-        <div className="fixed top-0 left-0 z-50 w-full">
-            <header className="font-satoshi relative p-4">
+        <div className={cn("fixed top-0 left-0 z-50 w-full transition-all duration-300", hidden && "-top-full")}>
+            <motion.header
+                className="font-satoshi relative p-4"
+                initial={{ opacity: 0, translateY: "-200%" }}
+                animate={{ opacity: 1, translateY: 0 }}
+                transition={{ delay: 1, duration: 1, ease: "circInOut" }}
+            >
                 {/* Menu */}
                 <div
                     className={cn(
@@ -123,7 +152,7 @@ export default function Navbar() {
                         <ChevronRight className="-mr-2 ml-1 h-6 stroke-1" />
                     </button>
                 </div>
-            </header>
+            </motion.header>
         </div>
     );
 }

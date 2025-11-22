@@ -9,8 +9,8 @@ export default function SmoothCursor() {
     const animationFrameId = useRef<number | null>(null);
 
     // Easing factor (lower = more "lag")
-    const easing = 0.1;
-    const cursorSize = 20; // Diameter of the circle
+    const easing = 0.2;
+    let cursorSize = 20; // Diameter of the circle
 
     useEffect(() => {
         // 1. Mousemove listener to update the target position
@@ -59,7 +59,7 @@ export default function SmoothCursor() {
         <div
             ref={cursorRef}
             // Added a shadow so it's visible on white backgrounds (like your card)
-            className="fixed top-0 left-0 rounded-full shadow-lg backdrop-invert-25"
+            className="pointer-events-none fixed top-0 left-0 rounded-full shadow-lg backdrop-invert-100"
             style={{
                 width: `${cursorSize}px`,
                 height: `${cursorSize}px`,

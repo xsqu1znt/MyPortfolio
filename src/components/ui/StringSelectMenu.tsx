@@ -67,9 +67,9 @@ export default function StringSelectMenu({
     useHandleClickOutside(buttonRef, () => setIsOpen(false));
 
     useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (!isOpen) return;
+        if (!isOpen) return;
 
+        const handleKeyDown = (e: KeyboardEvent) => {
             switch (e.key) {
                 case "Escape":
                     setIsOpen(false);
@@ -79,7 +79,7 @@ export default function StringSelectMenu({
 
         document.addEventListener("keydown", handleKeyDown);
         return () => document.removeEventListener("keydown", handleKeyDown);
-    }, []);
+    }, [isOpen]);
 
     const toggleOpen = () => {
         setIsOpen(prev => !prev);

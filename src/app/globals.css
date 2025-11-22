@@ -1,17 +1,32 @@
 @import "tailwindcss";
 
 :root {
+    --white: #eee8e0;
+    --black: #000000;
     --accent: #71b6ff;
 
-    --background-primary: #000000;
-    --foreground-primary: #eee8e0;
+    --background-primary: var(--black);
+    --foreground-primary: var(--white);
     --foreground-dim: #e4e6ef80;
     --foreground-dimmer: #eee8e015;
 
     --icon-active: #eec997;
 }
 
+/* @custom-variant dark (&:is(.dark, .dark *));
+.dark {
+    --background-primary: var(--black);
+    --foreground-primary: var(--white);
+} */
+
+@custom-variant dark-foreground (&:is(.dark-foreground, .dark-foreground *));
+.dark-foreground {
+    --foreground-primary: var(--black);
+}
+
 @theme inline {
+    --color-white: var(--white);
+    --color-black: var(--black);
     --color-accent: var(--accent);
 
     --color-background-primary: var(--background-primary);
@@ -28,55 +43,16 @@
     --ease-overshoot: linear(0, 0.807 15.8%, 1.05 24.4%, 1.196 33.8%, 1.245 41.6%, 1.242 50.6%, 1.038 84%, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --accent: #71b6ff;
+@layer base {
+    body {
+        @apply bg-background-primary text-foreground-primary font-nunito min-h-screen min-w-80 scroll-smooth transition-colors duration-300;
+    }
 
-        --background-primary: #000000;
-        --foreground-primary: #eee8e0;
-        --foreground-dim: #e4e6ef80;
-        --foreground-dimmer: #eee8e015;
-
-        --icon-active: #eec997;
+    .section {
+        @apply mt-50 flex min-h-screen w-full flex-col gap-10 px-4;
     }
 }
-
-body {
-    min-width: 320px;
-    min-height: 100vh;
-    overflow-x: hidden;
-    background: var(--background-primary);
-    color: var(--foreground-primary);
-    font-family: var(--font-nunito), Arial, Helvetica, sans-serif;
-    scroll-behavior: smooth;
-}
-
-/* Make the scrollbar transparent */
-/* ::-webkit-scrollbar {
-    width: 8px;
-    background-color: transparent;
-} */
-
-/* Make the thumb thinner */
-/* ::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 1);
-    border-radius: 4px;
-    border: none;
-    height: 8px;
-} */
 
 .no-scrollbar::-webkit-scrollbar {
     display: none;
-}
-
-.shade-3d {
-    box-shadow:
-        inset 1px 1px 4px 0 rgba(255 255 255 / 0.05),
-        inset -3px -3px 4px 0 rgba(0 0 0 / 0.1);
-}
-
-@layer base {
-    .section {
-        @apply flex w-full flex-col gap-10 px-4;
-    }
 }
