@@ -1,5 +1,6 @@
 "use client";
 
+import { VelocityMarquee, MarqueeItem } from "@/components/ui/VelocityMarquee";
 import { motion, useScroll, useTransform } from "motion/react";
 import { RefObject, useRef } from "react";
 
@@ -27,10 +28,14 @@ export default function Branding() {
 
     return (
         <div ref={selfRef} className="relative flex flex-col justify-center overflow-hidden">
-            <BottomBranding selfRef={selfRef} />
+            {/* <BottomBranding selfRef={selfRef} /> */}
 
-            <div className="absolute top-0 left-0 h-full w-[25%] bg-linear-to-r from-black to-transparent" />
-            <div className="absolute top-0 right-0 h-full w-[25%] bg-linear-to-l from-black to-transparent" />
+            {/* <div className="absolute top-0 left-0 h-full w-[25%] bg-linear-to-r from-black to-transparent" /> */}
+            {/* <div className="absolute top-0 right-0 h-full w-[25%] bg-linear-to-l from-black to-transparent" /> */}
+
+            <VelocityMarquee baseVelocity={-1} className="text-foreground-primary/15 text-6xl uppercase">
+                <MarqueeItem text="Landing Page | Custom Website | UI/UX Design | Copy // Marketing | SEO-Optimization | Maintenance" />
+            </VelocityMarquee>
         </div>
     );
 }

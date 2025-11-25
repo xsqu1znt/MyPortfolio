@@ -1,5 +1,6 @@
 "use client";
 
+import SectionHeader from "@/components/layout/SectionHeader";
 import Button from "@/components/ui/Button";
 import StringSelectMenu from "@/components/ui/StringSelectMenu";
 import TextInput from "@/components/ui/TextInput";
@@ -8,7 +9,7 @@ import { ArrowRight } from "lucide-react";
 
 function ContactServiceForm() {
     return (
-        <div className="flex flex-col gap-8">
+        <div className="col-span flex w-full flex-col gap-8 rounded-md border border-black/5 bg-black/5 p-6">
             {/* Field/Project Type */}
             <StringSelectMenu
                 id="ssm-project-type"
@@ -69,14 +70,13 @@ export default function Contact() {
         <>
             {/* Section/Contact */}
             <section id="contact" className="section">
-                {/* <SectionHeader title="// CONTACT" description="Let's get your business the attention it needs." /> */}
+                <div className="grid grid-cols-2">
+                    <div className="flex w-full flex-col items-center justify-center">
+                        <SectionHeader title="CONTACT" description="Let's get in touch." />
+                    </div>
 
-                <div className="flex w-full flex-col gap-2">
-                    <span className="font-sans text-6xl font-bold tracking-tight">// CONTACT</span>
-                    <span className="text-foreground-dim text-xl font-normal tracking-tight">Request an inquiry today.</span>
+                    <ContactServiceForm />
                 </div>
-
-                <ContactServiceForm />
             </section>
         </>
     );

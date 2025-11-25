@@ -12,9 +12,9 @@ export default function SectionHeader({
     align?: "left" | "right";
 }) {
     return (
-        <div className={cn("flex w-full flex-col gap-1", align === "right" && "text-right")}>
-            <h2 className="w-full text-2xl font-light tracking-tight">{title}</h2>
-            <p className="text-foreground-dim w-full font-light tracking-wide">{description}</p>
+        <div className={cn("flex flex-col gap-1", align === "right" && "text-right")}>
+            <h2 className="font-sans text-6xl font-bold tracking-tight">{title}</h2>
+            <p className="text-foreground-dim text-xl font-normal tracking-tight">{description}</p>
         </div>
     );
 }

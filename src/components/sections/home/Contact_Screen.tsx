@@ -1,5 +1,6 @@
 "use client";
 
+import { MarqueeItem, VelocityMarquee } from "@/components/ui/VelocityMarquee";
 import { cn } from "@/lib/utils";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ComponentProps, RefObject, useEffect, useRef, useTransition } from "react";
@@ -87,6 +88,14 @@ function HeadingText({ containerRef }: { containerRef?: RefObject<HTMLDivElement
             <span className="text-background-primary font-sans text-6xl font-medium tracking-tight transition-colors duration-300 text-shadow-lg">
                 Your business deserves attention.
             </span>
+
+            {/* <VelocityMarquee baseVelocity={-1} className="text-6xl uppercase">
+                <MarqueeItem text="Landing Page | Custom Website | UI/UX Design | Copy // Marketing | SEO-Optimization | Maintenance" />
+            </VelocityMarquee>
+
+            <VelocityMarquee baseVelocity={1} className="text-6xl uppercase">
+                <MarqueeItem text="Landing Page | Custom Website | UI/UX Design | Copy // Marketing | SEO-Optimization | Maintenance" />
+            </VelocityMarquee> */}
         </motion.div>
     );
 }

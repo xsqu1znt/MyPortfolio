@@ -82,7 +82,7 @@ export default function Navbar() {
                 transition={{ delay: 0.75, duration: 1, ease: [0.741, 0.002, 0.083, 0.999] }}
             >
                 {/* Logo */}
-                <a href="/" className="font-sans text-2xl font-semibold">
+                <a href="/" className="w-fit font-sans text-2xl font-semibold">
                     GG
                 </a>
 
@@ -162,6 +162,15 @@ export default function Navbar() {
                         <ChevronRight className="size-5 stroke-[1.5px]" />
                     </Button>
                 </div>
+
+                {/* Progressive blur */}
+                <div
+                    className="absolute inset-0 -z-10 h-full w-full backdrop-blur-xl backdrop-hue-rotate-180"
+                    style={{
+                        maskImage: "linear-gradient(to bottom, black, transparent)",
+                        WebkitMaskImage: "linear-gradient(to bottom, black, transparent)"
+                    }}
+                />
             </motion.header>
         </div>
     );
