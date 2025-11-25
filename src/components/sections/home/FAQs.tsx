@@ -94,7 +94,7 @@ export default function FAQs() {
             <div className="grid grid-cols-2">
                 <FAQList />
 
-                <div className="flex w-full flex-col items-center justify-center">
+                <div className="flex w-full flex-col items-center justify-center text-center">
                     <SectionHeader title="FAQs" description="Let's keep it simple." />
                 </div>
             </div>

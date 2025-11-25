@@ -9,7 +9,7 @@ export default function Services() {
         <section id="services" className="section px-0">
             {/* Header */}
             <div className="w-full px-4">
-                <SectionHeader title="// SERVICES" description="Design clean. Build clever. Ship fast." />
+                <SectionHeader title="SERVICES" description="Design clean. Build clever. Ship fast." />
             </div>
 
             {/* Wrapper/Services */}
@@ -24,7 +24,7 @@ export default function Services() {
             {/* Marquee/Separator */}
             <VelocityMarquee
                 baseVelocity={-2}
-                className="text-background-primary bg-accent my-25 rotate-2 py-2 font-sans text-7xl font-semibold tracking-tighter uppercase"
+                className="text-background-primary bg-accent my-32 rotate-2 py-2 font-sans text-7xl font-semibold tracking-tighter uppercase"
             >
                 <MarqueeItem text="Looking for a specific service?" />
             </VelocityMarquee>

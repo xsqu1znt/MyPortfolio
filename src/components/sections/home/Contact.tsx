@@ -71,7 +71,7 @@ export default function Contact() {
             {/* Section/Contact */}
             <section id="contact" className="section">
                 <div className="grid grid-cols-2">
-                    <div className="flex w-full flex-col items-center justify-center">
+                    <div className="flex w-full flex-col items-center justify-center text-center">
                         <SectionHeader title="CONTACT" description="Let's get in touch." />
                     </div>
 
