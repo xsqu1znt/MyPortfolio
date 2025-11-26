@@ -6,19 +6,41 @@ import { ComponentProps } from "react";
 import { MarqueeItem, VelocityMarquee } from "../ui/VelocityMarquee";
 import { cn } from "@/lib/utils";
 
-function ArrowLink({ label, href, accent }: { label: string; href: string; accent?: boolean }) {
+interface ArrowLinkProps {
+    label: string;
+    href: string;
+    accent?: boolean;
+    newTab?: boolean;
+}
+
+interface UnderlineLinkProps {
+    underline: true;
+    label: string;
+    href: string;
+    newTab?: boolean;
+}
+
+interface IconLinkProps {
+    label: string;
+    href: string;
+    iconSrc: string;
+    iconAlt: string;
+    iconSize?: number;
+    translateXMargin?: number;
+    accent?: boolean;
+    newTab?: boolean;
+    reverseIconAlignment?: boolean;
+}
+
+function ArrowLink({ label, href, accent, newTab }: ArrowLinkProps) {
     return (
         <div className="group relative w-fit cursor-pointer overflow-hidden pr-8 text-2xl text-nowrap">
-            <span className="pointer-events-none opacity-0">{label}</span>
             <ArrowUpRight className="text-accent absolute top-1/2 left-0 size-6 -translate-x-6 -translate-y-1/2 -rotate-90 stroke-[1.5px] opacity-0 transition-all duration-200 group-hover:size-7 group-hover:translate-x-0 group-hover:rotate-0 group-hover:opacity-100" />
             <a
-                className={cn(
-                    "absolute top-0 left-0 font-sans transition-all duration-250 group-hover:translate-x-7",
-                    accent && "text-accent"
-                )}
+                className={`inline-block font-sans transition-all duration-250 group-hover:translate-x-7 ${accent ? "text-accent" : ""}`}
                 href={href}
-                target="_blank"
-                rel="noopener noreferrer"
+                target={newTab ? "_blank" : undefined}
+                rel={newTab ? "noopener noreferrer" : undefined}
             >
                 {label}
             </a>
@@ -26,25 +48,78 @@ function ArrowLink({ label, href, accent }: { label: string; href: string; accen
     );
 }
 
-function ArrowLinkList({ links }: { links: { label: string; href: string; accent?: boolean }[] }) {
-    return links.map((link, i) => (
-        <li key={i}>
-            <ArrowLink label={link.label} href={link.href} accent={link.accent} />
-        </li>
-    ));
-}
-
-function UnderlineLink({ label, href }: { label: string; href: string }) {
+function IconLink({
+    label,
+    href,
+    iconSrc,
+    iconAlt,
+    iconSize = 7,
+    translateXMargin = 8,
+    accent,
+    newTab,
+    reverseIconAlignment
+}: IconLinkProps) {
     return (
-        <div className="group relative w-fit cursor-pointer overflow-hidden text-lg text-nowrap">
-            <a className="font-serif" href={href} target="_blank" rel="noopener noreferrer">
+        <div className="group relative w-fit cursor-pointer pr-8 text-2xl text-nowrap">
+            {/* Icon */}
+            <img
+                src={iconSrc}
+                alt={iconAlt}
+                className={`absolute top-1/2 left-0 size-${iconSize - 1} -translate-x-full -translate-y-1/2 -rotate-45 opacity-0 transition-all duration-200 group-hover:size-${iconSize} group-hover:translate-x-0 ${reverseIconAlignment ? "group-hover:-rotate-5" : "group-hover:rotate-5"} group-hover:opacity-100`}
+            />
+            {/* Delay effect */}
+            <img
+                src={iconSrc}
+                alt={iconAlt}
+                className={`absolute top-1/2 left-0 -z-10 size-${iconSize - 1} -translate-x-full -translate-y-1/2 -rotate-45 opacity-0 transition-all duration-300 group-hover:size-${iconSize} group-hover:translate-x-0 ${reverseIconAlignment ? "group-hover:-rotate-5" : "group-hover:rotate-5"} group-hover:opacity-50`}
+            />
+            {/* Glow */}
+            <img
+                src={iconSrc}
+                alt={iconAlt}
+                className={`absolute top-1/2 left-0 -z-10 blur-sm size-${iconSize - 1} -translate-x-full -translate-y-1/2 -rotate-45 opacity-0 transition-all duration-300 group-hover:size-${iconSize} group-hover:translate-x-0 ${reverseIconAlignment ? "group-hover:-rotate-5" : "group-hover:rotate-5"} group-hover:opacity-50`}
+            />
+            {/* Label */}
+            <a
+                className={`inline-block font-sans transition-all duration-250 group-hover:translate-x-${translateXMargin} ${accent ? "text-accent" : ""}`}
+                href={href}
+                target={newTab ? "_blank" : undefined}
+                rel={newTab ? "noopener noreferrer" : undefined}
+            >
                 {label}
             </a>
-            <div className="opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <div className="bg-accent absolute bottom-0 left-0 h-[1.75px] w-0 transition-all duration-200 group-hover:w-full" />
-            </div>
         </div>
     );
+}
+
+function UnderlineLink({ label, href, newTab }: UnderlineLinkProps) {
+    return (
+        <div className="group relative w-fit cursor-pointer overflow-hidden text-nowrap">
+            <a
+                className="font-sans"
+                href={href}
+                target={newTab ? "_blank" : undefined}
+                rel={newTab ? "noopener noreferrer" : undefined}
+            >
+                {label}
+            </a>
+            <div className="bg-accent absolute bottom-0 left-0 h-[1.25px] w-0 transition-all duration-200 group-hover:w-full" />
+        </div>
+    );
+}
+
+function LinkList({ links }: { links: (ArrowLinkProps | IconLinkProps | UnderlineLinkProps)[] }) {
+    return links.map((link, i) => (
+        <li key={i}>
+            {"iconSrc" in link ? (
+                <IconLink {...link} />
+            ) : "underline" in link ? (
+                <UnderlineLink {...link} />
+            ) : (
+                <ArrowLink {...link} />
+            )}
+        </li>
+    ));
 }
 
 function List(props: ComponentProps<"ul">) {
@@ -56,36 +131,6 @@ function LabeledList({ label, children, ...props }: ComponentProps<"div"> & { la
         <div {...props} className="flex w-fit flex-col">
             <span className="text-foreground-dim mb-4 cursor-default text-sm">{label}</span>
             <List>{children}</List>
-        </div>
-    );
-}
-
-function StackedText({ label, delay }: { label: string; delay: number }) {
-    return (
-        <div className="*:ease-overshoot relative overflow-hidden text-3xl font-bold tracking-tighter *:transition-all *:duration-500">
-            <span className="pointer-events-none opacity-0">{label}</span>
-            <span
-                className="absolute top-0 left-0 inline-block -translate-y-full animate-pulse group-hover:translate-y-0"
-                style={{ animationDelay: `${delay * 4}ms`, transitionDelay: `${delay}ms` }}
-            >
-                {label}
-            </span>
-            <span
-                className="absolute top-0 left-0 inline-block group-hover:translate-y-full"
-                style={{ transitionDelay: `${delay}ms` }}
-            >
-                {label}
-            </span>
-        </div>
-    );
-}
-
-function StackedTextRow({ label }: { label: string }) {
-    return (
-        <div className="group text-foreground-dim hover:text-foreground-primary flex w-fit cursor-default transition-all duration-3500">
-            {label.split("").map((char, i) => (
-                <StackedText key={i} label={char} delay={i * 20} />
-            ))}
         </div>
     );
 }
@@ -113,33 +158,53 @@ export default function Footer() {
                                 <li>GMT-10</li>
                             </ul>
 
-                            <UnderlineLink label="guniquegrimble@gmail.com" href="mailto:guniquegrimble@gmail.com" />
-
-                            <div className="flex gap-4">
-                                <img src="/icons/socials/whatsapp.svg" alt="Whatsapp" className="" />
-                                <UnderlineLink label="+1 808 426-6141" href="tel:+18084266141" />
-                            </div>
+                            <LinkList
+                                links={[
+                                    {
+                                        underline: true,
+                                        label: "guniquegrimble@gmail.com",
+                                        href: "mailto:guniquegrimble@gmail.com"
+                                    },
+                                    { underline: true, label: "+1 808 426-6141", href: "tel:+18084266141" }
+                                ]}
+                            />
                         </LabeledList>
 
                         <LabeledList label="SITEMAP">
-                            <ArrowLinkList
+                            <LinkList
                                 links={[
                                     { label: "Work", href: "#work" },
                                     { label: "About", href: "#about" },
                                     { label: "Services", href: "#services" },
                                     { label: "Contact", href: "#contact" }
-                                    // { label: "Testimonials", href: "#" }
                                 ]}
                             />
                         </LabeledList>
 
                         <LabeledList label="CONNECT">
-                            <ArrowLinkList
+                            <LinkList
                                 links={[
-                                    { label: "Linkedin", href: "https://www.linkedin.com/in/guniqueg/" },
-                                    { label: "Twitter / X", href: "https://x.com/bygunique" },
-                                    // { label: "Instagram", href: "https://www.instagram.com/xsqu1znt/" },
-                                    { label: "Github", href: "https://github.com/xsqu1znt" },
+                                    {
+                                        label: "Linkedin",
+                                        href: "https://www.linkedin.com/in/guniqueg/",
+                                        iconSrc: "/icons/socials/linkedin.svg",
+                                        iconAlt: "Linkedin"
+                                    },
+                                    {
+                                        label: "Twitter / X",
+                                        href: "https://x.com/bygunique",
+                                        iconSrc: "/icons/socials/x.svg",
+                                        iconAlt: "Twitter (X)",
+                                        reverseIconAlignment: true
+                                    },
+                                    {
+                                        label: "Github",
+                                        href: "https://github.com/xsqu1znt",
+                                        iconSrc: "/icons/socials/github-white.svg",
+                                        iconAlt: "Github",
+                                        iconSize: 6,
+                                        translateXMargin: 7
+                                    },
                                     { label: "Octave Labs", href: "https://octavelabs.com", accent: true }
                                 ]}
                             />
@@ -153,13 +218,6 @@ export default function Footer() {
                             <ArrowUp className="text-icon-active ease-overshoot size-10 rotate-45 stroke-[1.5px] transition-all duration-300 group-hover:rotate-0" />
                         </button>
                     </div>
-
-                    {/* <div className="bg-foreground-dimmer flex w-full px-4 py-8">
-                        <LabeledList label="BUSINESS">
-                            <ArrowLinkList links={[{ label: "Octave Labs", href: "https://octavelabs.com" }]} />
-                            <ArrowLinkList links={[{ label: "My Team", href: "https://octavelabs.com/team" }]} />
-                        </LabeledList>
-                    </div> */}
 
                     <div className="border-foreground-dimmer text-foreground-dim flex w-full items-center justify-between border-t border-b py-4 text-sm">
                         <span>© Copyright {new Date().getFullYear()}</span>
