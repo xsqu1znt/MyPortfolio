@@ -12,7 +12,7 @@ interface VelocityMarqueeProps {
 
 interface MarqueeItemProps {
     text: string;
-    transparent?: boolean;
+    className?: string;
 }
 
 // Wraps a number between min and max
@@ -77,4 +77,6 @@ export function VelocityMarquee({
     );
 }
 
-export const MarqueeItem: React.FC<MarqueeItemProps> = ({ text }) => <span className="mx-4">{text}</span>;
+export const MarqueeItem: React.FC<MarqueeItemProps> = ({ text, className }) => (
+    <span className={cn("mx-4", className)}>{text}</span>
+);

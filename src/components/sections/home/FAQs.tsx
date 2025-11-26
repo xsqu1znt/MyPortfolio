@@ -90,14 +90,9 @@ function FAQList() {
 
 export default function FAQs() {
     return (
-        <section id="faqs" className="section">
-            <div className="grid grid-cols-2">
-                <FAQList />
-
-                <div className="flex w-full flex-col items-center justify-center text-center">
-                    <SectionHeader title="FAQs" description="Let's keep it simple." />
-                </div>
-            </div>
+        <section id="faq" className="section">
+            <SectionHeader title="FAQs" description="Let's keep it simple." />
+            <FAQList />
         </section>
     );
 }

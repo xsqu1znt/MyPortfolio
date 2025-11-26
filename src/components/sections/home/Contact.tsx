@@ -9,7 +9,7 @@ import { ArrowRight } from "lucide-react";
 
 function ContactServiceForm() {
     return (
-        <div className="col-span flex w-full flex-col gap-8 rounded-md border border-black/5 bg-black/5 p-6">
+        <div className="flex w-full flex-col gap-8 rounded-md border border-black/5 bg-black/5">
             {/* Field/Project Type */}
             <StringSelectMenu
                 id="ssm-project-type"
@@ -70,13 +70,8 @@ export default function Contact() {
         <>
             {/* Section/Contact */}
             <section id="contact" className="section">
-                <div className="grid grid-cols-2">
-                    <div className="flex w-full flex-col items-center justify-center text-center">
-                        <SectionHeader title="CONTACT" description="Let's get in touch." />
-                    </div>
-
-                    <ContactServiceForm />
-                </div>
+                <SectionHeader title="CONTACT" description="Let's get in touch." />
+                <ContactServiceForm />
             </section>
         </>
     );

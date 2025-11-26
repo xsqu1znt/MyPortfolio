@@ -92,10 +92,13 @@ export default function Navbar() {
                         <a href="#work">Work</a>
                     </li>
                     <li>
+                        <a href="#faq">About</a>
+                    </li>
+                    <li>
                         <a href="#services">Services</a>
                     </li>
                     <li>
-                        <a href="#faq">FAQ</a>
+                        <a href="#contact">Contact</a>
                     </li>
                 </ul>
 
