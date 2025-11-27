@@ -1,19 +1,11 @@
-import type { Metadata, Viewport } from "next";
-import { Nunito, Work_Sans } from "next/font/google";
-import localFont from "next/font/local";
-import "./globals.css";
-import "./animations.css";
+import Footer from "@/components/layout/Footer";
+import Grain from "@/components/layout/Grain";
 import Navbar from "@/components/layout/Navbar";
 import ReactLenis from "lenis/react";
-import Footer from "@/components/layout/Footer";
-import SmoothCursor from "@/components/common/SmoothCursor";
-import Grain from "@/components/layout/Grain";
-
-/* const nunito = Nunito({
-    variable: "--font-nunito",
-    subsets: ["latin"],
-    display: "swap"
-}); */
+import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
+import "./animations.css";
+import "./globals.css";
 
 const font_sans = localFont({
     variable: "--font-sans",
@@ -103,8 +95,8 @@ export default function RootLayout({
             <body
                 className={`dark no-scrollbar relative antialiased ${font_sans.variable} ${font_serif.variable} ${font_special.variable}`}
             >
-                <Grain />
                 <ReactLenis root options={{ lerp: 0.15, allowNestedScroll: true }} />
+                <Grain />
                 {/* <SmoothCursor /> */}
                 <Navbar />
                 {children}

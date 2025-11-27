@@ -6,6 +6,7 @@
     --accent: #71b6ff;
 
     --background-primary: var(--black);
+    --background-secondary: #292a39;
     --foreground-primary: var(--white);
     --foreground-dim: #e4e6ef80;
     --foreground-dimmer: #eee8e015;
@@ -30,6 +31,7 @@
     --color-accent: var(--accent);
 
     --color-background-primary: var(--background-primary);
+    --color-background-secondary: var(--background-secondary);
     --color-foreground-primary: var(--foreground-primary);
     --color-foreground-dim: var(--foreground-dim);
     --color-foreground-dimmer: var(--foreground-dimmer);

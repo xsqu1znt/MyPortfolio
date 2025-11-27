@@ -56,9 +56,9 @@ export default function FeaturedWork() {
 
             <Showreel className="mt-[50vh] mb-[50vh]">
                 <ShowreelCard src="/images/showreel/001.png" />
-                <ShowreelCard src="/images/showreel/002.png" alignment="right" />
-                <ShowreelCard src="/images/showreel/003.png" />
-                <ShowreelCard src="/images/showreel/004.png" alignment="right" />
+                <ShowreelCard src="/images/showreel/001.png" alignment="right" />
+                <ShowreelCard src="/images/showreel/001.png" />
+                <ShowreelCard src="/images/showreel/001.png" alignment="right" />
 
                 {/* <ShowreelCard src="/images/showreel/001.png" />
                 <ShowreelCard src="/images/showreel/002.png" alignment="right" />

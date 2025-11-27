@@ -8,13 +8,13 @@ export default function SectionHeader({
     align
 }: {
     title: string;
-    description: string;
+    description?: string;
     align?: "left" | "right";
 }) {
     return (
         <div className={cn("flex flex-col gap-1", align === "right" && "text-right")}>
             <h2 className="font-sans text-6xl font-bold tracking-tight">{title}</h2>
-            <p className="text-foreground-dim text-xl font-normal tracking-tight">{description}</p>
+            {description && <span className="text-foreground-dim text-xl font-normal tracking-tight">{description}</span>}
         </div>
     );
 }

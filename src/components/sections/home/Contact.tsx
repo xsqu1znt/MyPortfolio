@@ -70,7 +70,7 @@ export default function Contact() {
         <>
             {/* Section/Contact */}
             <section id="contact" className="section">
-                <SectionHeader title="CONTACT" description="Let's get in touch." />
+                <SectionHeader title="LET'S TALK" description="Your business deserves attention." />
                 <ContactServiceForm />
             </section>
         </>

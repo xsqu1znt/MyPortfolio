@@ -168,7 +168,7 @@ export default function Navbar() {
 
                 {/* Progressive blur */}
                 <div
-                    className="absolute inset-0 -z-10 h-full w-full backdrop-blur-xl backdrop-hue-rotate-180"
+                    className="absolute inset-0 -z-10 h-full w-full backdrop-blur-xl backdrop-hue-rotate-15"
                     style={{
                         maskImage: "linear-gradient(to bottom, black, transparent)",
                         WebkitMaskImage: "linear-gradient(to bottom, black, transparent)"

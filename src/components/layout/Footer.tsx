@@ -170,7 +170,7 @@ export default function Footer() {
                 <div className="px-4">
                     <div className="border-foreground-dimmer relative grid w-full grid-cols-3 border-t py-8">
                         <LabeledList label="CONTACT">
-                            <ul className="mb-4 text-2xl">
+                            <ul className="mb-4 font-sans text-2xl">
                                 <li>Hawaii, USA</li>
                                 <li>GMT-10</li>
                             </ul>
