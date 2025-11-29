@@ -5,11 +5,18 @@ import Button from "@/components/ui/Button";
 import StringSelectMenu from "@/components/ui/StringSelectMenu";
 import TextInput from "@/components/ui/TextInput";
 import { AddonServices, MainServices } from "@/constants/services";
+import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
+import { ComponentProps } from "react";
 
-function ContactServiceForm() {
+function ContactServiceForm({ className }: ComponentProps<"div">) {
     return (
-        <div className="flex w-full flex-col gap-8 rounded-md border border-black/5 bg-black/5">
+        <div
+            className={cn(
+                "bg-background-secondary flex w-full flex-col gap-8 rounded-md border border-white/5 p-6",
+                className
+            )}
+        >
             {/* Field/Project Type */}
             <StringSelectMenu
                 id="ssm-project-type"
@@ -69,9 +76,10 @@ export default function Contact() {
     return (
         <>
             {/* Section/Contact */}
-            <section id="contact" className="section">
+            <section id="contact" className="section items-center">
+                <div className="mt-16" />
                 <SectionHeader title="LET'S TALK" description="Your business deserves attention." />
-                <ContactServiceForm />
+                <ContactServiceForm className="max-w-[500px]" />
             </section>
         </>
     );

@@ -2,6 +2,7 @@
 
 import SectionHeader from "@/components/layout/SectionHeader";
 import { FAQ } from "@/constants/faqs";
+import { styles } from "@/constants/styles";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 import { ComponentProps, useState } from "react";
@@ -90,9 +91,16 @@ function FAQList() {
 
 export default function FAQs() {
     return (
-        <section id="faq" className="section">
-            <SectionHeader title="FAQs" description="Let's keep it simple." />
-            <FAQList />
+        <section id="faq" className="section light bg-background-primary px-0">
+            <div
+                className={`bg-background-secondary border-foreground-dimmer relative mt-64 h-full w-full border-t pb-16 ${styles.padding.section}`}
+                // style={{ clipPath: "polygon(0 0, 100% 5%, 100% 100%, 0% 100%)" }}
+            >
+                <div className="absolute top-0 left-0 h-12 w-full bg-linear-to-b from-black/2 to-transparent" />
+                <div className="mt-16" />
+                <SectionHeader title="FAQs" description="Let's keep it simple." />
+                <FAQList />
+            </div>
         </section>
     );
 }

@@ -7,15 +7,15 @@ import { styles } from "@/constants/styles";
 
 export default function Services() {
     return (
-        <section id="services" className="section px-0">
+        <section id="services" className="section bg-background-secondary px-0 pb-16">
             {/* Header */}
-            <div className={`w-full ${styles.padding.section}`}>
+            <div className={`mt-16 w-full ${styles.padding.section}`}>
                 <SectionHeader title="SERVICES" description="Design clean. Build clever. Ship fast." />
             </div>
 
             {/* Wrapper/Services */}
             <div className={`w-full ${styles.padding.section}`}>
-                <div className="bg-foreground-dimmer divide-foreground-dimmer flex w-full flex-col divide-y overflow-hidden rounded-md">
+                <div className="bg-background-secondary divide-foreground-dimmer flex w-full flex-col divide-y overflow-hidden rounded-md">
                     {MainServices.map((service, i) => (
                         <ServiceCard key={i} index={i + 1} {...service} />
                     ))}
@@ -32,7 +32,7 @@ export default function Services() {
 
             {/* Wrapper/Extra Services */}
             <div className={`w-full ${styles.padding.section}`}>
-                <div className="bg-foreground-dimmer divide-foreground-dimmer flex w-full flex-col divide-y overflow-hidden rounded-md">
+                <div className="bg-background-secondary divide-foreground-dimmer flex w-full flex-col divide-y overflow-hidden rounded-md">
                     {AddonServices.map((service, i) => (
                         <ServiceCard key={i} index={i + 1 + MainServices.length} {...service} />
                     ))}

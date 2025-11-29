@@ -35,7 +35,7 @@ export default function FeaturedWork() {
     // const subheaderX = useTransform(scrollYProgress, [0, 0.5, 1], [25, 0, 25]);
 
     return (
-        <section ref={sectionRef} id="work" className="section items-center">
+        <section ref={sectionRef} id="work" className="section mt-50 items-center">
             {/* Header */}
             <motion.div
                 className="pointer-events-none sticky top-1/2 left-1/2 -z-50 flex w-fit -translate-x-1/2 -translate-y-1/2 flex-col"

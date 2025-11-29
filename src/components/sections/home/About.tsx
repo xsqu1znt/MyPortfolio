@@ -7,19 +7,39 @@ import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 
 export default function About() {
+    const sectionRef = useRef<HTMLDivElement>(null);
     const selfieRef = useRef<HTMLImageElement>(null);
+
+    const { scrollYProgress: sectionScrollYProgress } = useScroll({
+        target: sectionRef,
+        offset: ["start end", "start start"]
+    });
+
+    const sectionBorderRadius = useTransform(sectionScrollYProgress, [0, 1], ["5rem", "0rem"]);
+    const sectionScale = useTransform(sectionScrollYProgress, [0, 1], [0.9, 1]);
+    const sectionTranslateY = useTransform(sectionScrollYProgress, [0, 0.5], [200, 0]);
 
     const { scrollYProgress } = useScroll({
         target: selfieRef,
         offset: ["start end", "end start"]
     });
 
-    const objectPosition = useTransform(scrollYProgress, [0, 1], ["0% 10%", "0% 60%"]);
+    const objectPosition = useTransform(scrollYProgress, [0, 1], ["0% 10%", "0% 40%"]);
 
     return (
-        <section id="about" className="section">
+        <motion.section
+            ref={sectionRef}
+            id="about"
+            className="section light bg-background-primary"
+            style={{
+                translateY: sectionTranslateY,
+                scale: sectionScale,
+                borderTopLeftRadius: sectionBorderRadius,
+                borderTopRightRadius: sectionBorderRadius
+            }}
+        >
             {/* Header */}
-            <div className="flex h-fit flex-col gap-2">
+            <div className="mt-16 flex h-fit flex-col gap-2">
                 {/* Heading */}
                 <div className="w-1/2 overflow-clip font-sans font-black tracking-tight">
                     <motion.div
@@ -28,7 +48,7 @@ export default function About() {
                         whileInView={{ opacity: 1, translateY: 0 }}
                         transition={{ duration: 0.5, ease: easings.fluidInOut }}
                     >
-                        <FitText>WHO AM I</FitText>
+                        <FitText>WHO I AM</FitText>
                     </motion.div>
                 </div>
 
@@ -45,7 +65,7 @@ export default function About() {
                 <div>
                     <div className="overflow-clip">
                         <motion.p
-                            className="inline-block max-w-1/2 pt-2 text-lg leading-relaxed tracking-wide"
+                            className="inline-block max-w-1/2 pt-2 text-lg tracking-wide"
                             viewport={{ once: true }}
                             initial={{ opacity: 0, translateY: "100%", filter: "blur(16px)" }}
                             whileInView={{ opacity: 1, translateY: 0, filter: "blur(0px)" }}
@@ -57,7 +77,7 @@ export default function About() {
 
                     <div className="overflow-clip">
                         <motion.p
-                            className="inline-block max-w-1/2 pt-2 text-lg leading-relaxed tracking-wide"
+                            className="inline-block max-w-1/2 pt-2 text-lg tracking-wide"
                             viewport={{ once: true }}
                             initial={{ opacity: 0, translateY: "100%", filter: "blur(16px)" }}
                             whileInView={{ opacity: 1, translateY: 0, filter: "blur(0px)" }}
@@ -218,13 +238,13 @@ export default function About() {
             </div>
 
             {/* Separator */}
-            <motion.div
+            {/* <motion.div
                 className="bg-foreground-dimmer h-px w-full"
                 viewport={{ once: true }}
                 initial={{ width: 0 }}
                 whileInView={{ width: "100%" }}
                 transition={{ delay: 0.3, duration: 0.5, ease: easings.fluidInOut }}
-            />
+            /> */}
 
             {/* OCTAVELABS */}
             {/* <div className="mt-32 flex flex-col gap-12">
@@ -241,6 +261,6 @@ export default function About() {
                     <div className="h-64 w-full border border-white/5 bg-white/5" />
                 </div>
             </div> */}
-        </section>
+        </motion.section>
     );
 }

@@ -14,15 +14,13 @@
     --icon-active: #f7b569;
 }
 
-/* @custom-variant dark (&:is(.dark, .dark *));
-.dark {
-    --background-primary: var(--black);
-    --foreground-primary: var(--white);
-} */
-
-@custom-variant dark-foreground (&:is(.dark-foreground, .dark-foreground *));
-.dark-foreground {
+@custom-variant light (&:is(.light, .light *));
+.light {
+    --background-primary: var(--white);
+    --background-secondary: #dfdad3;
     --foreground-primary: var(--black);
+    --foreground-dim: #434340;
+    --foreground-dimmer: #bababa;
 }
 
 @theme inline {
@@ -51,7 +49,15 @@
     }
 
     .section {
-        @apply mt-50 flex min-h-screen w-full flex-col gap-10 px-4 md:px-8;
+        @apply flex min-h-screen w-full flex-col gap-10 px-4 md:px-8;
+    }
+
+    .dark {
+        @apply text-foreground-primary;
+    }
+
+    .light {
+        @apply text-foreground-primary;
     }
 }
 
