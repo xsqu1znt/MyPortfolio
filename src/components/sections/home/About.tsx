@@ -100,12 +100,12 @@ export default function About() {
             </div>
 
             {/* Numbers */}
-            <div className="mt-32 grid grid-cols-2 gap-12">
+            <div className="mt-64 grid grid-cols-2 gap-12">
                 <div className="overflow-clip">
                     <motion.h3
                         className="inline-block cursor-default font-sans text-6xl font-semibold"
                         viewport={{ once: true }}
-                        initial={{ opacity: 0, translateX: 25 }}
+                        initial={{ opacity: 0, translateX: -25 }}
                         whileInView={{ opacity: 1, translateX: 0 }}
                         transition={{ duration: 0.5, ease: easings.fluidInOut }}
                     >
