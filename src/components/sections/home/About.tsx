@@ -1,7 +1,8 @@
 "use client";
 
 import FitText from "@/components/layout/FitText";
-import SectionHeader from "@/components/layout/SectionHeader";
+import AnimateNumber from "@/components/ui/AnimateNumber";
+import { easings } from "@/config/motion";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 
@@ -13,23 +14,59 @@ export default function About() {
         offset: ["start end", "end start"]
     });
 
-    const objectPosition = useTransform(scrollYProgress, [0, 1], ["0% 10%", "0% 40%"]);
+    const objectPosition = useTransform(scrollYProgress, [0, 1], ["0% 10%", "0% 60%"]);
 
     return (
         <section id="about" className="section">
             {/* Header */}
             <div className="flex h-fit flex-col gap-2">
                 {/* Heading */}
-                <div className="w-1/2 font-sans font-black tracking-tight">
-                    <FitText>WHO I AM</FitText>
+                <div className="w-1/2 overflow-clip font-sans font-black tracking-tight">
+                    <motion.div
+                        viewport={{ once: true }}
+                        initial={{ opacity: 0, translateY: "100%" }}
+                        whileInView={{ opacity: 1, translateY: 0 }}
+                        transition={{ duration: 0.5, ease: easings.fluidInOut }}
+                    >
+                        <FitText>WHO AM I</FitText>
+                    </motion.div>
                 </div>
+
                 {/* Separator */}
-                <div className="bg-foreground-dimmer h-px w-full" />
+                <motion.div
+                    className="bg-foreground-dimmer h-px"
+                    viewport={{ once: true }}
+                    initial={{ width: 0 }}
+                    whileInView={{ width: "100%" }}
+                    transition={{ delay: 0.3, duration: 0.5, ease: easings.fluidInOut }}
+                />
+
                 {/* Paragraph */}
-                <p className="max-w-1/2 pt-2 text-lg leading-relaxed tracking-wide">
-                    I'm Gunique — a web developer & designer building functional interfaces, modern branding, and fast,
-                    scalable websites for startups & creators.
-                </p>
+                <div>
+                    <div className="overflow-clip">
+                        <motion.p
+                            className="inline-block max-w-1/2 pt-2 text-lg leading-relaxed tracking-wide"
+                            viewport={{ once: true }}
+                            initial={{ opacity: 0, translateY: "100%", filter: "blur(16px)" }}
+                            whileInView={{ opacity: 1, translateY: 0, filter: "blur(0px)" }}
+                            transition={{ delay: 0.3, duration: 0.5, ease: easings.fluidInOut }}
+                        >
+                            I'm Gunique — a web developer & designer building functional interfaces, modern
+                        </motion.p>
+                    </div>
+
+                    <div className="overflow-clip">
+                        <motion.p
+                            className="inline-block max-w-1/2 pt-2 text-lg leading-relaxed tracking-wide"
+                            viewport={{ once: true }}
+                            initial={{ opacity: 0, translateY: "100%", filter: "blur(16px)" }}
+                            whileInView={{ opacity: 1, translateY: 0, filter: "blur(0px)" }}
+                            transition={{ delay: 0.35, duration: 0.5, ease: easings.fluidInOut }}
+                        >
+                            branding, and fast, scalable websites for startups & creators.
+                        </motion.p>
+                    </div>
+                </div>
             </div>
 
             {/* Selfie */}
@@ -42,50 +79,106 @@ export default function About() {
                         alt=""
                         className="max-h-128 w-full -scale-x-100 object-cover"
                         style={{ objectPosition }}
+                        viewport={{ amount: 0.8, once: true }}
+                        initial={{ opacity: 0, translateX: -15 }}
+                        whileInView={{ opacity: 1, translateX: 0 }}
+                        transition={{ duration: 0.5, ease: "easeInOut" }}
                     />
 
-                    <p className="leading-relaxed tracking-wide">
+                    <motion.p
+                        className="inline-block leading-relaxed tracking-wide"
+                        viewport={{ margin: "-100px", once: true }}
+                        initial={{ opacity: 0, translateY: -15, filter: "blur(16px)" }}
+                        whileInView={{ opacity: 1, translateY: 0, filter: "blur(0px)" }}
+                        transition={{ duration: 0.5, ease: easings.fluidInOut }}
+                    >
                         I design and develop custom websites, landing pages, and UI systems that help brands look modern and
                         communicate clearly. My work blends minimal design with strong structure, tight typography, and high
                         functionality.
-                    </p>
+                    </motion.p>
                 </div>
             </div>
 
             {/* Numbers */}
             <div className="mt-32 grid grid-cols-2 gap-12">
-                <h3 className="cursor-default font-sans text-6xl font-semibold">The numbers don't lie.</h3>
+                <div className="overflow-clip">
+                    <motion.h3
+                        className="inline-block cursor-default font-sans text-6xl font-semibold"
+                        viewport={{ once: true }}
+                        initial={{ opacity: 0, translateX: 25 }}
+                        whileInView={{ opacity: 1, translateX: 0 }}
+                        transition={{ duration: 0.5, ease: easings.fluidInOut }}
+                    >
+                        The numbers don't lie.
+                    </motion.h3>
+                </div>
 
-                <div className="divide-foreground-dimmer border-foreground-dimmer flex w-full flex-col divide-y border-t">
-                    <div className="grid w-full grid-cols-2 py-6">
-                        <span className="font-sans text-6xl tracking-tight">5+</span>
+                <div className="divide-foreground-dimmer flex w-full flex-col divide-y">
+                    <motion.div
+                        className="grid w-full grid-cols-2 py-6"
+                        viewport={{ margin: "-250px" }}
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ duration: 0.5, ease: easings.fluidInOut }}
+                    >
+                        <span className="font-sans text-6xl tracking-tight">
+                            <AnimateNumber value={5} direction="up" />+
+                        </span>
                         <span className="text-foreground-dim text-lg">
                             Years working with clients, teams, projects, and making things happen.
                         </span>
-                    </div>
+                    </motion.div>
 
-                    <div className="grid w-full grid-cols-2 py-6">
-                        <span className="font-sans text-6xl tracking-tight">26+</span>
+                    <motion.div
+                        className="grid w-full grid-cols-2 py-6"
+                        viewport={{ margin: "-250px" }}
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ duration: 0.5, ease: easings.fluidInOut }}
+                    >
+                        <span className="font-sans text-6xl tracking-tight">
+                            <AnimateNumber value={26} direction="up" />+
+                        </span>
                         <span className="text-foreground-dim text-lg">
                             Projects launched and remembered. I keep the standards high and the process simple.
                         </span>
-                    </div>
+                    </motion.div>
 
-                    <div className="grid w-full grid-cols-2 py-6">
-                        <span className="font-sans text-6xl tracking-tight">14+</span>
+                    <motion.div
+                        className="grid w-full grid-cols-2 py-6"
+                        viewport={{ margin: "-250px" }}
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ duration: 0.5, ease: easings.fluidInOut }}
+                    >
+                        <span className="font-sans text-6xl tracking-tight">
+                            <AnimateNumber value={14} direction="up" />+
+                        </span>
                         <span className="text-foreground-dim text-lg">
                             Amazing people I've worked with. Each project unique, every need fulfilled.
                         </span>
-                    </div>
+                    </motion.div>
                 </div>
             </div>
 
             {/* Separator */}
-            <div className="bg-foreground-dimmer h-px w-full" />
+            <motion.div
+                className="bg-foreground-dimmer h-px w-full"
+                viewport={{ once: true }}
+                initial={{ width: 0 }}
+                whileInView={{ width: "100%" }}
+                transition={{ delay: 0.3, duration: 0.5, ease: easings.fluidInOut }}
+            />
 
             {/* Extra */}
             <div className="flex flex-col gap-12">
-                <div className="grid grid-cols-2 gap-12">
+                <motion.div
+                    className="grid grid-cols-2 gap-12"
+                    viewport={{ margin: "-250px", once: true }}
+                    initial={{ opacity: 0, translateY: -25, filter: "blur(16px)" }}
+                    whileInView={{ opacity: 1, translateY: 0, filter: "blur(0px)" }}
+                    transition={{ duration: 0.5, ease: easings.fluidInOut }}
+                >
                     <div className="flex gap-2">
                         <span className="text-foreground-dim cursor-default text-xs tracking-tighter">//</span>
                         <span className="text-foreground-dim cursor-default font-sans text-2xl">MY PROCESS</span>
@@ -94,12 +187,24 @@ export default function About() {
                         I follow a simple process that keeps everything predictable: Research. Wireframes. Design.
                         Development. Launch. Support. Clients always know what stage we're in and what's coming next.
                     </p>
-                </div>
+                </motion.div>
 
                 {/* Separator */}
-                <div className="bg-foreground-dimmer h-px w-full" />
+                <motion.div
+                    className="bg-foreground-dimmer h-px w-full"
+                    viewport={{ once: true }}
+                    initial={{ width: 0 }}
+                    whileInView={{ width: "100%" }}
+                    transition={{ delay: 0.3, duration: 0.5, ease: easings.fluidInOut }}
+                />
 
-                <div className="grid grid-cols-2 gap-12">
+                <motion.div
+                    className="grid grid-cols-2 gap-12"
+                    viewport={{ margin: "-250px", once: true }}
+                    initial={{ opacity: 0, translateY: -25, filter: "blur(16px)" }}
+                    whileInView={{ opacity: 1, translateY: 0, filter: "blur(0px)" }}
+                    transition={{ duration: 0.5, ease: easings.fluidInOut }}
+                >
                     <div className="flex gap-2">
                         <span className="text-foreground-dim cursor-default text-xs tracking-tighter">//</span>
                         <span className="text-foreground-dim cursor-default font-sans text-2xl">MY EXPERIENCE</span>
@@ -109,14 +214,20 @@ export default function About() {
                         and custom tools. I handle both design and development, so projects stay consistent from start to
                         finish.
                     </p>
-                </div>
+                </motion.div>
             </div>
 
             {/* Separator */}
-            <div className="bg-foreground-dimmer h-px w-full" />
+            <motion.div
+                className="bg-foreground-dimmer h-px w-full"
+                viewport={{ once: true }}
+                initial={{ width: 0 }}
+                whileInView={{ width: "100%" }}
+                transition={{ delay: 0.3, duration: 0.5, ease: easings.fluidInOut }}
+            />
 
             {/* OCTAVELABS */}
-            <div className="mt-32 flex flex-col gap-12">
+            {/* <div className="mt-32 flex flex-col gap-12">
                 <div className="flex flex-col gap-4">
                     <div className="grid grid-cols-2 gap-12">
                         <p className="leading-relaxed tracking-wide">
@@ -127,10 +238,9 @@ export default function About() {
                         </p>
                     </div>
 
-                    {/* Placeholder/Image */}
                     <div className="h-64 w-full border border-white/5 bg-white/5" />
                 </div>
-            </div>
+            </div> */}
         </section>
     );
 }

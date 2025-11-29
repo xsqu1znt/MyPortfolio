@@ -1,8 +1,13 @@
+"use client";
+
 import SectionHeader from "@/components/layout/SectionHeader";
+import { easings } from "@/config/motion";
 import { testimonials } from "@/constants/testimonials";
 import { TestimonialCardProps } from "@/types/shared";
 import { Star } from "lucide-react";
+import { motion, useScroll, useTransform } from "motion/react";
 import Image from "next/image";
+import { useRef } from "react";
 
 function TestimonialCard({ imageSrc, flagSrc, name, handle, review }: TestimonialCardProps) {
     const firstReview = Array.isArray(review) ? review[0] : review;
@@ -86,12 +91,27 @@ function TestimonialCard({ imageSrc, flagSrc, name, handle, review }: Testimonia
 }
 
 export default function Testimonials() {
+    const headerRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: headerRef,
+        offset: ["start end", "end start"]
+    });
+
+    const headerTranslateX = useTransform(scrollYProgress, [0, 1.1], ["5%", "-5%"]);
+
     return (
         <section id="testimonials" className="section">
             <div className="border-foreground-dimmer w-full border-b text-right">
-                <div className="w-[75%] text-right">
+                <motion.div
+                    ref={headerRef}
+                    className="w-[75%] text-right"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ duration: 0.5, ease: easings.fluidInOut }}
+                    style={{ translateX: headerTranslateX }}
+                >
                     <SectionHeader title="What people say." />
-                </div>
+                </motion.div>
             </div>
 
             <div className="grid grid-cols-3 gap-12">
