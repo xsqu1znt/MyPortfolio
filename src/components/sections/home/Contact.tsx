@@ -76,10 +76,18 @@ export default function Contact() {
     return (
         <>
             {/* Section/Contact */}
-            <section id="contact" className="section items-center">
-                <div className="mt-16" />
-                <SectionHeader title="LET'S TALK" description="Your business deserves attention." />
-                <ContactServiceForm className="max-w-[500px]" />
+            <section id="contact" className="section relative items-center">
+                <SectionHeader
+                    title="LET'S TALK"
+                    description="Your business deserves attention."
+                    className="mt-16 items-center"
+                />
+
+                <div className="relative">
+                    <div className="absolute bottom-0 left-1/2 -z-10 h-155 w-150 -translate-x-1/2 rounded-full bg-linear-to-b from-white opacity-10 blur-3xl" />
+
+                    <ContactServiceForm className="max-w-[500px]" />
+                </div>
             </section>
         </>
     );

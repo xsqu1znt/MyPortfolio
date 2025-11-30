@@ -26,7 +26,7 @@ function FAQAccordion({
         <div
             {...props}
             className={cn(
-                `group flex w-full flex-col gap-2 border border-t-transparent border-r-transparent border-l-transparent bg-transparent px-4 py-4.5 font-serif transition-all duration-300 ${collapsed ? "" : "rounded-md border-t-white/5 border-r-white/5 border-l-white/5 bg-white/5 shadow-[0_0_32px_2px] shadow-white/5"}`,
+                `group flex w-full flex-col gap-2 border border-t-transparent border-r-transparent border-l-transparent bg-transparent px-4 py-4.5 font-serif transition-all duration-300 ${collapsed ? "" : "rounded-md border-t-white/5 border-r-white/5 border-l-white/5 bg-black/5 shadow-[0_0_32px_2px] shadow-black/5"}`,
                 className
             )}
         >
@@ -74,7 +74,7 @@ function FAQList() {
     };
 
     return (
-        <div className="flex flex-col">
+        <div className="mt-16 flex flex-col">
             {FAQ.map((faq, i) => (
                 <FAQAccordion
                     key={i}
