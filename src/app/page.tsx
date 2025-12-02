@@ -10,7 +10,7 @@ export default function Home() {
     return (
         <main className="flex w-full flex-col">
             <Hero />
-            {/* <FeaturedWork /> */}
+            <FeaturedWork />
             {/* <Services /> */}
             {/* <Testimonials /> */}
             {/* <About /> */}
