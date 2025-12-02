@@ -8,14 +8,14 @@ import Testimonials from "@/components/sections/home/Testimonials";
 
 export default function Home() {
     return (
-        <main className="flex min-h-screen min-w-[320px] flex-col">
+        <main className="flex w-full flex-col">
             <Hero />
-            <FeaturedWork />
-            <Services />
-            <Testimonials />
-            <About />
-            <FAQs />
-            <Contact />
+            {/* <FeaturedWork /> */}
+            {/* <Services /> */}
+            {/* <Testimonials /> */}
+            {/* <About /> */}
+            {/* <FAQs /> */}
+            {/* <Contact /> */}
         </main>
     );
 }

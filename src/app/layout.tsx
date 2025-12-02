@@ -100,7 +100,7 @@ export default function RootLayout({
                 {/* <SmoothCursor /> */}
                 <Navbar />
                 {children}
-                <Footer />
+                {/* <Footer /> */}
             </body>
         </html>
     );

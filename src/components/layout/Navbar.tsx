@@ -26,9 +26,9 @@ function NavLink({ label, sectionId }: { label: string; sectionId: string }) {
     );
 }
 
-function NavLinkList({ links }: { links: { label: string; sectionId: string }[] }) {
+function NavLinkList({ links, className }: { links: { label: string; sectionId: string }[]; className?: string }) {
     return (
-        <ul className="flex items-center gap-6 place-self-center font-sans text-lg font-medium">
+        <ul className={cn("flex items-center gap-6 place-self-center font-sans text-lg font-medium", className)}>
             {links.map(link => (
                 <li key={link.sectionId}>
                     <NavLink {...link} />
@@ -103,9 +103,9 @@ export default function Navbar() {
     };
 
     return (
-        <div className={cn("fixed top-0 left-0 z-50 w-full transition-all duration-300", hidden && "-top-full")}>
+        <div className={cn("fixed top-0 left-0 z-50 w-full transition-all duration-300")}>
             <motion.header
-                className={`relative grid grid-cols-3 ${styles.padding.navbar}`}
+                className={`relative grid grid-cols-2 md:grid-cols-3 ${styles.padding.navbar}`}
                 initial={{ opacity: 0, translateY: "-200%" }}
                 animate={{ opacity: 1, translateY: 0 }}
                 transition={{ delay: 0.75, duration: 1, ease: easings.fluidInOut }}
@@ -120,6 +120,7 @@ export default function Navbar() {
 
                 {/* Links */}
                 <NavLinkList
+                    className="hidden md:flex"
                     links={[
                         { label: "Work", sectionId: "work" },
                         { label: "Services", sectionId: "services" },
@@ -180,9 +181,21 @@ export default function Navbar() {
                 </div> */}
 
                 {/* CTA/Contact */}
-                <Button variant="transparent" label="CONTACT" className="place-self-end p-0" onClick={handleScrollContact}>
-                    <ChevronRight className="size-5 stroke-[1.5px]" />
-                </Button>
+                <div className="hidden items-center justify-end md:flex">
+                    <Button variant="transparent" label="CONTACT" className="p-0" onClick={handleScrollContact}>
+                        <ChevronRight className="size-5 stroke-[1.5px]" />
+                    </Button>
+                </div>
+
+                {/* Hamburger Menu */}
+                <div className="flex items-center justify-end md:hidden">
+                    <button className={cn("relative mr-2 flex w-6 cursor-pointer items-center gap-2 md:hidden")}>
+                        <div className="flex flex-col items-end gap-3">
+                            <div className="bg-icon-active h-0.5 w-7" />
+                            <div className="bg-icon-active h-0.5 w-5" />
+                        </div>
+                    </button>
+                </div>
 
                 {/* Progressive blur */}
                 <div
