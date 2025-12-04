@@ -97,7 +97,6 @@ export default function FAQs() {
                 // style={{ clipPath: "polygon(0 0, 100% 5%, 100% 100%, 0% 100%)" }}
             >
                 <div className="absolute top-0 left-0 h-12 w-full bg-linear-to-b from-black/2 to-transparent" />
-                <div className="mt-16" />
                 <SectionHeader title="FAQs" description="Let's keep it simple." />
                 <FAQList />
             </div>
