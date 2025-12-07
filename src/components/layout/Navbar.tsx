@@ -7,19 +7,35 @@ import { cn } from "@/lib/utils";
 import { useLenis } from "lenis/react";
 import { ChevronRight } from "lucide-react";
 import { motion } from "motion/react";
-import { useRef, useState } from "react";
+import { ComponentProps, useEffect, useRef, useState } from "react";
 import Button from "../ui/Button";
 import { styles } from "@/constants/styles";
+import { useUserClient } from "@/hooks/useUserClient";
+import { useNavContext } from "../provider/NavProvider";
 
-function NavLink({ label, sectionId, isDarkMode }: { label: string; sectionId: string; isDarkMode?: boolean }) {
+function NavLink({
+    label,
+    sectionId,
+    isDarkMode,
+    toggleMenuOpen,
+    className,
+    ...props
+}: ComponentProps<"a"> & {
+    label: string;
+    sectionId: string;
+    isDarkMode?: boolean;
+    toggleMenuOpen?: () => void;
+    className?: string;
+}) {
     const lenis = useLenis();
 
     const scrollTo = () => {
+        toggleMenuOpen?.();
         lenis?.scrollTo(`#${sectionId}`, { duration: 2 });
     };
 
     return (
-        <a className={"group relative inline-block cursor-pointer"} onClick={scrollTo}>
+        <a {...props} className={cn("group relative inline-block cursor-pointer font-sans", className)} onClick={scrollTo}>
             <span className="transition-opacity duration-300 group-hover:opacity-75">{label}</span>
             <div
                 className={cn(
@@ -51,65 +67,77 @@ function NavLinkList({
     );
 }
 
-export default function Navbar({ isDarkMode }: { isDarkMode?: boolean }) {
+function NavMenuToggle({ isMenuOpen, toggleMenuOpen }: { isMenuOpen: boolean; toggleMenuOpen: () => void }) {
+    const [hovered, setHovered] = useState(false);
+    const [tapped, setTapped] = useState(false);
+
+    const handleMouseEnter = () => {
+        setHovered(true);
+    };
+
+    const handleMouseLeave = () => {
+        setHovered(false);
+    };
+
+    const handleClick = () => {
+        if (!tapped) {
+            setTapped(true);
+            setHovered(false);
+
+            setTimeout(() => {
+                setTapped(false);
+                toggleMenuOpen();
+            }, 200);
+        }
+    };
+
+    return (
+        <button
+            className="group size-7 cursor-pointer"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onClick={handleClick}
+        >
+            <div className={cn("relative h-full w-full *:absolute *:transition-all *:duration-200")}>
+                <div
+                    className={cn(
+                        "bg-accent-secondary top-1.5 left-0 h-0.5 w-7",
+                        tapped && !isMenuOpen && "top-1/2 -translate-y-1/2",
+                        isMenuOpen && "top-1/2 -translate-y-1/2 -rotate-45 bg-red-400",
+                        tapped && isMenuOpen && "rotate-0",
+                        hovered && !isMenuOpen && "left-2 w-5"
+                    )}
+                />
+                <div
+                    className={cn(
+                        "bg-accent-secondary right-0 bottom-1.5 h-0.5 w-5",
+                        tapped && !isMenuOpen && "bottom-1/2 w-7 translate-y-1/2",
+                        isMenuOpen && "bottom-1/2 w-7 translate-y-1/2 rotate-45 bg-red-400",
+                        tapped && isMenuOpen && "rotate-0",
+                        hovered && !isMenuOpen && "w-7"
+                    )}
+                />
+            </div>
+        </button>
+    );
+}
+
+export default function Navbar({ isDarkMode, setNavOpen }: { isDarkMode?: boolean; setNavOpen: (prev: boolean) => void }) {
     const lenis = useLenis();
 
-    const [hidden, setHidden] = useState(false);
-    const [isFull, setIsFull] = useState(false);
     const [menuClicked, setMenuClicked] = useState(false);
     const [menuHovered, setMenuHovered] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const { viewportHeight } = useViewportSize();
-    const { scrollY } = useScroll();
-    const lastScrollPositionY = useRef<number>(0);
-
-    /* useEffect(() => {
-        if (!scrollY || !viewportHeight) return;
-        setIsFull(scrollY >= viewportHeight);
-
-        if (!scrollY) {
-            setHidden(false);
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflowY = "hidden";
         } else {
-            // Scrolling downwards
-            if (scrollY > lastScrollPositionY.current) {
-                if (!hidden) {
-                    setTimeout(() => {
-                        setHidden(true);
-                    }, 250);
-                }
-            }
-            // Scrolling upwards
-            else {
-                if (hidden) {
-                    setHidden(false);
-                }
-            }
+            document.body.style.overflowY = "";
         }
 
-        lastScrollPositionY.current = scrollY;
-    }, [scrollY, viewportHeight]); */
-
-    const handleMenuToggle = () => {
-        setIsMenuOpen(prev => !prev);
-    };
-
-    const handleMenuMouseDown = () => {
-        setMenuClicked(true);
-    };
-
-    const handleMenuMouseUp = () => {
-        setMenuClicked(false);
-        if (menuHovered) {
-            setMenuHovered(false);
-        }
-    };
-
-    const handleMenuMouseEnter = () => {
-        if (!isMenuOpen) {
-            setMenuHovered(true);
-        }
-    };
+        setNavOpen(isMenuOpen);
+    }, [isMenuOpen]);
 
     const scrollToTop = () => {
         lenis?.scrollTo(0, { duration: 2 });
@@ -119,17 +147,117 @@ export default function Navbar({ isDarkMode }: { isDarkMode?: boolean }) {
         lenis?.scrollTo("#contact", { duration: 2 });
     };
 
+    const handleMenuOpenToggle = () => {
+        setIsMenuOpen(prev => !prev);
+    };
+
     return (
         <div className={cn("fixed top-0 left-0 z-50 w-full transition-colors duration-300", isDarkMode && "text-black")}>
+            {/* Mobile Menu */}
+            <div className={cn("light fixed top-0 left-0 h-dvh w-full", !isMenuOpen && "pointer-events-none")}>
+                <motion.div
+                    className="bg-background-primary h-full w-full overflow-x-hidden overflow-y-auto"
+                    initial={{
+                        clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)"
+                    }}
+                    animate={{
+                        clipPath: isMenuOpen
+                            ? "polygon(0% 0%, 100% 0%, 100% 175%, 0% 100%)"
+                            : "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)"
+                    }}
+                    transition={{ duration: 0.5, ease: easings.fluidInOut }}
+                >
+                    <div className={`flex min-h-full w-full flex-col justify-center gap-6 py-16 ${styles.padding.section}`}>
+                        <ul className="flex flex-col gap-4 text-6xl">
+                            {[
+                                { label: "Work", sectionId: "work" },
+                                { label: "Services", sectionId: "services" },
+                                { label: "About", sectionId: "about" },
+                                { label: "Contact", sectionId: "contact" }
+                            ].map((link, idx) => (
+                                <li key={idx} className="overflow-hidden">
+                                    <motion.div
+                                        animate={{
+                                            opacity: isMenuOpen ? 1 : 0,
+                                            translateY: isMenuOpen ? 0 : "100%"
+                                        }}
+                                        transition={{
+                                            delay: isMenuOpen ? 0.1 + 0.05 * idx : 0,
+                                            duration: 0.5,
+                                            ease: easings.fluidInOut
+                                        }}
+                                    >
+                                        <NavLink
+                                            label={link.label}
+                                            sectionId={link.sectionId}
+                                            isDarkMode={true}
+                                            toggleMenuOpen={handleMenuOpenToggle}
+                                        />
+                                    </motion.div>
+                                </li>
+                            ))}
+                        </ul>
+
+                        <ul className="text-foreground-dim flex flex-col gap-1 text-xl">
+                            {[
+                                {
+                                    label: "Linkedin",
+                                    href: "https://www.linkedin.com/in/guniqueg/"
+                                },
+                                {
+                                    label: "Twitter / X",
+                                    href: "https://x.com/bygunique"
+                                },
+                                {
+                                    label: "Github",
+                                    href: "https://github.com/xsqu1znt"
+                                },
+                                { label: "Octave Labs", href: "https://octavelabs.com", accent: true }
+                            ].map((link, idx) => (
+                                <li key={idx} className="overflow-hidden">
+                                    <motion.div
+                                        animate={{
+                                            opacity: isMenuOpen ? 1 : 0,
+                                            translateY: isMenuOpen ? 0 : "100%"
+                                        }}
+                                        transition={{
+                                            delay: isMenuOpen ? 0.5 + 0.05 * idx : 0,
+                                            duration: 0.5,
+                                            ease: easings.fluidInOut
+                                        }}
+                                    >
+                                        <a
+                                            href={link.href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={cn(
+                                                "transition-opacity duration-200 hover:opacity-75",
+                                                link.accent && "text-accent"
+                                            )}
+                                        >
+                                            {link.label}
+                                        </a>
+                                    </motion.div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </motion.div>
+            </div>
+
+            {/* Navbar */}
             <motion.header
-                className={`relative grid grid-cols-2 md:grid-cols-3 ${styles.padding.navbar}`}
+                className={`relative grid grid-cols-2 lg:grid-cols-3 ${styles.padding.navbar}`}
                 initial={{ opacity: 0, translateY: "-200%" }}
                 animate={{ opacity: 1, translateY: 0 }}
                 transition={{ delay: 0.75, duration: 1, ease: easings.fluidInOut }}
             >
                 {/* Logo */}
                 <button
-                    className="w-fit cursor-pointer place-content-center font-sans text-2xl font-semibold transition-opacity duration-300 hover:opacity-75"
+                    className={cn(
+                        "w-fit cursor-pointer place-content-center font-sans text-2xl font-semibold transition-opacity duration-300 hover:opacity-75",
+                        isMenuOpen && "text-black"
+                    )}
                     onClick={scrollToTop}
                 >
                     GG
@@ -137,7 +265,7 @@ export default function Navbar({ isDarkMode }: { isDarkMode?: boolean }) {
 
                 {/* Links */}
                 <NavLinkList
-                    className="hidden md:flex"
+                    className="hidden lg:flex"
                     links={[
                         { label: "Work", sectionId: "work" },
                         { label: "Services", sectionId: "services" },
@@ -146,73 +274,16 @@ export default function Navbar({ isDarkMode }: { isDarkMode?: boolean }) {
                     isDarkMode={isDarkMode}
                 />
 
-                {/* <div
-                    className={cn(
-                        "group absolute top-4 left-4 flex h-[50px] items-center justify-between rounded-md border border-white/5 bg-white/5 px-4 py-2 backdrop-blur-xl transition-all duration-300",
-                        isFull ? "w-[calc(100%-32px)]" : "w-48"
-                    )}
-                >
-                    <button
-                        className={cn("flex h-[40px] items-center justify-end", isFull ? "w-[calc(100vw-32px)]" : "w-48")}
-                        onClick={handleMenuToggle}
-                        onMouseDown={handleMenuMouseDown}
-                        onTouchStart={handleMenuMouseDown}
-                        onMouseUp={handleMenuMouseUp}
-                        onTouchEnd={handleMenuMouseUp}
-                        onMouseLeave={handleMenuMouseUp}
-                        onTouchCancel={handleMenuMouseUp}
-                        onMouseEnter={handleMenuMouseEnter}
-                        onTouchMove={handleMenuMouseEnter}
-                    >
-                        <div className="-mx-1 cursor-pointer px-1 py-3">
-                            <div
-                                className={cn(
-                                    "relative h-3.5 w-6 transition-all duration-300",
-                                    isMenuOpen && "-translate-y-[2px]"
-                                )}
-                            >
-                                <div
-                                    className={cn(
-                                        "bg-accent-secondary absolute right-0 h-0.5 w-6 origin-center transition-all duration-300",
-                                        menuClicked ? "top-1/2 translate-y-1/2" : "top-0",
-                                        isMenuOpen
-                                            ? "top-1/2 z-[1] w-6 translate-[1px] -rotate-45 rounded-md bg-red-400 outline-2 outline-[#161616]"
-                                            : "",
-                                        menuClicked && isMenuOpen && "-rotate-15",
-                                        menuHovered && "h-0.5 w-4"
-                                    )}
-                                />
-                                <div
-                                    className={cn(
-                                        "bg-accent-secondary absolute right-0 bottom-0 h-0.5 w-4 origin-center rounded-md transition-all duration-300",
-                                        menuClicked ? "bottom-1/2 translate-y-[3px]" : "bottom-0",
-                                        isMenuOpen
-                                            ? "bottom-1/2 w-6 translate-y-[3px] rotate-45 bg-red-400 outline-2 outline-[#161616]"
-                                            : "",
-                                        menuClicked && isMenuOpen && "rotate-15",
-                                        menuHovered && "h-0.5 w-6"
-                                    )}
-                                />
-                            </div>
-                        </div>
-                    </button>
-                </div> */}
-
                 {/* CTA/Contact */}
-                <div className="hidden items-center justify-end md:flex">
+                <div className="hidden items-center justify-end lg:flex">
                     <Button variant="transparent" label="CONTACT" className="p-0" onClick={scrollToContact}>
                         <ChevronRight className="size-5 stroke-[1.5px]" />
                     </Button>
                 </div>
 
                 {/* Hamburger Menu */}
-                <div className="flex items-center justify-end md:hidden">
-                    <button className={cn("relative mr-2 flex w-6 cursor-pointer items-center gap-2 md:hidden")}>
-                        <div className="flex flex-col items-end gap-3">
-                            <div className="bg-accent-secondary h-0.5 w-7" />
-                            <div className="bg-accent-secondary h-0.5 w-5" />
-                        </div>
-                    </button>
+                <div className="flex items-center justify-end lg:hidden">
+                    <NavMenuToggle isMenuOpen={isMenuOpen} toggleMenuOpen={handleMenuOpenToggle} />
                 </div>
 
                 {/* Progressive blur */}
