@@ -6,6 +6,7 @@ import { ServiceCardProps } from "@/types/shared";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import Button from "../ui/Button";
+import { useLenis } from "lenis/react";
 
 function ServiceHeader({ index, title, expanded }: ServiceCardProps & { expanded: boolean }) {
     return (
@@ -127,14 +128,19 @@ function ServiceExtra({ extraDetails, handleContact, expanded }: ServiceCardProp
 // --- Main Card Component ---
 
 export default function ServiceCard(props: ServiceCardProps) {
+    const lenis = useLenis();
     const [expanded, setExpanded] = useState(false);
     const { isMobile } = useUserClient();
+
+    const scrollToContact = () => {
+        lenis?.scrollTo("#contact", { duration: 2 });
+    };
 
     // Note: You would typically pass handleContact as a prop from the parent,
     // but for this example, we'll define a placeholder if not provided.
     const finalProps = {
         ...props,
-        handleContact: props.handleContact || (() => console.log("Contact action triggered.")),
+        handleContact: props.handleContact || scrollToContact,
         extraDetails: props.extraDetails || [] // Ensure extraDetails is an array
     };
 

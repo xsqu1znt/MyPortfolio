@@ -177,7 +177,7 @@ function ContactServiceForm({ className }: ComponentProps<"div">) {
                 {/* Button/Submit */}
                 <div className="flex flex-col gap-2">
                     <Button
-                        label="SUBMIT"
+                        label="SUBMIT INQUIRY"
                         variant="accent"
                         full
                         disabled={isSubmitting}
@@ -195,7 +195,7 @@ function ContactServiceForm({ className }: ComponentProps<"div">) {
 export default function Contact() {
     return (
         <section id="contact" className="section relative items-center overflow-hidden">
-            <div className="absolute top-0 left-1/2 -z-10 size-280 -translate-x-1/2 -translate-y-1/2 rounded-full bg-linear-to-b from-white to-transparent opacity-25 blur-[250px]" />
+            <div className="absolute top-0 left-1/2 -z-10 size-280 -translate-x-1/2 -translate-y-1/2 rounded-full bg-linear-to-b from-white to-transparent opacity-10 blur-[250px] md:opacity-25" />
 
             <div className="mt-50 flex flex-col gap-10">
                 <SectionHeader title="LET'S TALK" description="Your business deserves attention." className="items-center" />
