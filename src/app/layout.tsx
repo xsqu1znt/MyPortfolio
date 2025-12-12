@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     publisher: "Gunique G.",
     metadataBase: new URL("https://portfolio-official-neon.vercel.app"),
     openGraph: {
-        title: "Gunique G. | Web Developer & Designer",
+        title: "Gunique G. | Portfolio",
         description:
             "Modern, functional, high-converting websites built for startups and creators. I design and develop custom websites, landing pages, and UI/UX that help brands stand out.",
         url: "https://portfolio-official-neon.vercel.app",
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "Gunique G. | Web Developer & Designer",
+        title: "Gunique G. | Portfolio",
         description:
             "Modern, functional, high-converting websites built for startups and creators. I design and develop custom websites, landing pages, and UI/UX that help brands stand out.",
         images: ["/twitter.png"],
