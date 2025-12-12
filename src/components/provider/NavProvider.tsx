@@ -1,9 +1,9 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
-import Navbar from "../layout/Navbar";
-import { motion } from "motion/react";
 import { easings } from "@/config/motion";
+import { motion } from "motion/react";
+import { createContext, useContext, useState } from "react";
+import Navbar from "../layout/Navbar";
 
 const NavContext = createContext<{ setNavOpen: (open: boolean) => void; setNavDarkMode: (useDarkMode: boolean) => void }>({
     setNavOpen: () => {},
@@ -20,13 +20,12 @@ export default function NavProvider({ children }: { children: React.ReactNode })
             <Navbar isDarkMode={isNavDarkMode} setNavOpen={setNavOpen} />
             <NavContext.Provider value={{ setNavOpen, setNavDarkMode }}>
                 <motion.div
-                    className="origin-top-left"
+                    className=""
                     animate={{
                         opacity: isNavOpen ? 0 : 1,
-                        rotate: isNavOpen ? 5 : 0,
-                        translateY: isNavOpen ? "50vh" : 0
+                        translateY: isNavOpen ? "10vh" : 0
                     }}
-                    transition={{ duration: 0.5, ease: easings.fluidInOut }}
+                    transition={{ duration: 0.6, ease: easings.fluidInOut }}
                 >
                     {children}
                 </motion.div>

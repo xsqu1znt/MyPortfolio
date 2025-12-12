@@ -1,6 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { HugeiconsFreeIcons, Loading03FreeIcons } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { ComponentProps } from "react";
 
 export type ButtonStyles = "primary" | "accent" | "transparent";
@@ -41,6 +43,7 @@ interface ButtonProps extends ComponentProps<"button"> {
     iconAlignment?: "left" | "right";
     full?: boolean;
     fit?: boolean;
+    waiting?: boolean;
 }
 
 export default function Button({
@@ -51,6 +54,8 @@ export default function Button({
     iconAlignment,
     full,
     fit,
+    waiting,
+    disabled,
     className,
     children,
     ...props
@@ -58,6 +63,7 @@ export default function Button({
     return (
         <button
             {...props}
+            disabled={disabled}
             className={cn(
                 "group flex w-fit cursor-pointer items-center rounded-md font-sans font-medium transition-all duration-300 hover:opacity-75",
                 buttonStyles[variant || "primary"],
@@ -66,18 +72,21 @@ export default function Button({
                 buttonIconAlignment[iconAlignment || "right"],
                 full && "w-full",
                 fit && "w-fit",
-                className
+                className,
+                disabled && "cursor-default bg-zinc-500 opacity-50",
+                waiting && "cursor-wait"
             )}
         >
             {label}
-            {children && (
+            {(children || waiting) && (
                 <div
                     className={cn(
                         "transition-transform duration-300 group-hover:translate-x-1",
-                        buttonIconMargin[iconAlignment || "right"]
+                        buttonIconMargin[iconAlignment || "right"],
+                        waiting && "translate-x-1"
                     )}
                 >
-                    {children}
+                    {waiting ? <HugeiconsIcon icon={Loading03FreeIcons} className="animate-spin" /> : children}
                 </div>
             )}
         </button>

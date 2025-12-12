@@ -1,17 +1,13 @@
 "use client";
 
 import { easings } from "@/config/motion";
-import { useScroll } from "@/hooks/useScroll";
-import useViewportSize from "@/hooks/useViewportSize";
+import { styles } from "@/constants/styles";
 import { cn } from "@/lib/utils";
 import { useLenis } from "lenis/react";
 import { ChevronRight } from "lucide-react";
 import { motion } from "motion/react";
-import { ComponentProps, useEffect, useRef, useState } from "react";
+import { ComponentProps, useEffect, useState } from "react";
 import Button from "../ui/Button";
-import { styles } from "@/constants/styles";
-import { useUserClient } from "@/hooks/useUserClient";
-import { useNavContext } from "../provider/NavProvider";
 
 function NavLink({
     label,

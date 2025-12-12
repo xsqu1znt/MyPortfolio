@@ -139,7 +139,7 @@ export default function About() {
                     ref={selfieRef}
                     src="/images/selfie.webp"
                     alt="Me on a cloudy, sunny day."
-                    className="max-h-64 w-full -scale-x-100 object-cover md:max-h-128 md:w-1/2"
+                    className="max-h-64 w-full -scale-x-100 rounded-md object-cover md:max-h-128 md:w-1/2"
                     loading="lazy"
                     style={{ objectPosition: selfie_objectPosition }}
                 />

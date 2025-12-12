@@ -17,7 +17,7 @@ function TestimonialCard({ imageSrc, flagSrc, name, handle, review }: Testimonia
         <div className="group bg-background-secondary relative flex w-full flex-col gap-6 rounded-md p-6">
             {/* Header */}
             <div className="relative flex w-full items-center gap-4">
-                <span className="text-foreground-dimmer absolute top-0 right-0 text-[12rem] leading-[0.7] transition-all duration-300 select-none group-hover:-translate-x-2">
+                <span className="text-foreground-dimmer absolute top-0 right-0 text-[8rem] leading-[0.7] transition-all duration-300 select-none group-hover:-translate-x-2 md:text-[10rem] lg:text-[12rem]">
                     “
                 </span>
 

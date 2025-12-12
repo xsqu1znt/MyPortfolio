@@ -37,6 +37,6 @@ export const FAQ = [
     },
     {
         question: "How do we get started?",
-        answer: 'Just hit the "Let\'s Talk" or "Contact" button, tell me a little about your project, and I\'ll follow up with next steps and a quote ASAP.'
+        answer: "Just hit the CONTACT button, tell me a little about your project, and I'll follow up with next steps and a quote ASAP."
     }
 ];

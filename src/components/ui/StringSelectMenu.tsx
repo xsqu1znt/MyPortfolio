@@ -55,6 +55,7 @@ export default function StringSelectMenu({
     direction,
     full,
     onOptionSelect,
+    disabled,
     className,
     ...props
 }: Props) {
@@ -99,7 +100,14 @@ export default function StringSelectMenu({
     };
 
     return (
-        <div ref={buttonRef} className={cn("flex flex-col gap-1", full && "w-full")}>
+        <div
+            ref={buttonRef}
+            className={cn(
+                "flex flex-col gap-1 transition-opacity duration-300",
+                full && "w-full",
+                disabled && "cursor-not-allowed opacity-50"
+            )}
+        >
             <label htmlFor={id} className="text-foreground-dim ml-2 text-xs tracking-tight">
                 {label}
             </label>
@@ -107,6 +115,7 @@ export default function StringSelectMenu({
             <div className={cn("relative", full && "w-full")}>
                 <button
                     id={id}
+                    disabled={disabled}
                     className={cn(
                         `group relative flex w-fit cursor-pointer items-center justify-between rounded-md px-4 py-3 transition-all duration-300`,
                         styleVariant,
@@ -116,7 +125,8 @@ export default function StringSelectMenu({
                         full && "w-full",
                         isOpen && (direction === "top" ? "rounded-t-none" : "rounded-b-none"),
                         isOpen && "border-transparent",
-                        className
+                        className,
+                        disabled && "pointer-events-none"
                     )}
                     onClick={toggleOpen}
                 >

@@ -8,6 +8,7 @@ import "./clipping.css";
 import "./globals.css";
 import NavProvider from "@/components/provider/NavProvider";
 import Footer from "@/components/layout/Footer";
+import { ToastContainer } from "react-toastify";
 
 const font_sans = localFont({
     variable: "--font-sans",
@@ -102,6 +103,7 @@ export default function RootLayout({
                 {/* <SmoothCursor /> */}
                 <NavProvider>{children}</NavProvider>
                 <Footer />
+                <ToastContainer position="bottom-right" theme="dark" />
             </body>
         </html>
     );

@@ -7,10 +7,13 @@ import TextInput from "@/components/ui/TextInput";
 import { AddonServices, MainServices } from "@/constants/services";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
-import { ComponentProps, useEffect, useRef, useState } from "react";
+import { ComponentProps, useRef, useState } from "react";
+import { toast } from "react-toastify";
+
+const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
 
 function ContactServiceForm({ className }: ComponentProps<"div">) {
-    const [projectType, setProjectType] = useState("");
+    const [projectType, setProjectType] = useState("Landing Page");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [timeline, setTimeline] = useState("");
@@ -18,154 +21,186 @@ function ContactServiceForm({ className }: ComponentProps<"div">) {
     const [message, setMessage] = useState("");
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [result, setResult] = useState("");
 
     const formRef = useRef<HTMLDivElement>(null);
     // useHandleClickOutside(formRef, setIsVisible);
 
-    const handleOptionSelect = (option: StringSelectMenuOption) => () => setProjectType(option.id);
-
-    useEffect(() => {
-        console.log(name);
-    }, [name]);
+    const handleOptionSelect = (option: StringSelectMenuOption) => {
+        setProjectType(option.label);
+    };
 
     const handleSubmit = async () => {
-        // e.preventDefault();
+        if (isSubmitting) return;
 
-        setResult("");
         setIsSubmitting(true);
 
-        await fetch("/api/contact", {
-            method: "POST",
-            body: JSON.stringify({ projectType, name, email, timeline, budget, message })
-        });
+        // Construct form data
+        const formData = { projectType, name, email, timeline, budget, message };
 
-        // const formData = new FormData(e.currentTarget);
+        try {
+            if (!WEB3FORMS_KEY) {
+                toast.error("Server configuration error.");
+                throw new Error("Server configuration error: 0x1337");
+            }
 
-        // formData.append("access_key", import.meta.env.VITE_WEB3FORM_KEY as string);
-        // formData.append("subject", subject as string);
+            // Format the message
+            const formattedMessage = [
+                "--- Project Details ---",
+                `Project Type: ${formData.projectType || "N/A"}`,
+                `Timeline: ${formData.timeline || "N/A"}`,
+                `Budget: ${formData.budget || "N/A"}`,
+                "",
+                "--- Contact Information ---",
+                `Name: ${formData.name || "N/A"}`,
+                `Email: ${formData.email || "N/A"}`,
+                "",
+                "--- Message ---",
+                `${formData.message || "No specific message provided."}`
+            ].join("\n");
 
-        /* const response = await fetch("https://api.web3forms.com/submit", {
-            method: "POST",
-            body: formData
-        });
+            // Construct the Web3Forms payload
+            const web3formsPayload = {
+                access_key: WEB3FORMS_KEY,
+                subject: `New Inquiry from ${formData.name}`,
+                message: formattedMessage,
+                email: formData.email
+            };
 
-        const data = await response.json();
-        if (data.success) {
-            setResult("✓ Thanks! Your message has been sent successfully.");
+            // Send the request
+            const web3formsRes = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", Accept: "application/json" },
+                body: JSON.stringify(web3formsPayload),
+                cache: "no-store"
+            });
+
+            const web3formsData = await web3formsRes.json();
+
+            if (web3formsRes.ok && web3formsData.success) {
+                toast.success("Thank you for reaching out! Expect a response within 24 hours.");
+            } else {
+                toast.error("Failed to send message. Please try again.");
+            }
+        } catch (error) {
+            toast.error("A catastrophic error occurred.");
+        } finally {
             setIsSubmitting(false);
-            e.currentTarget.reset();
-        } else {
-            setResult("⚠️ An error occurred, please try again.");
-            setIsSubmitting(false);
-        } */
+        }
     };
 
     return (
         <div
             className={cn(
-                "bg-background-secondary flex w-full flex-col gap-8 rounded-md border border-white/5 p-6",
+                "bg-background-secondary relative w-full overflow-hidden rounded-md border-2 border-white/5 p-6 transition-colors duration-300",
                 className
             )}
         >
-            {/* Field/Project Type */}
-            <StringSelectMenu
-                id="ssm-project-type"
-                label="PROJECT TYPE"
-                className="w-full"
-                // direction="top"
-                options={[
-                    ...MainServices.map(service => ({
-                        id: service.title,
-                        label: service.title,
-                        description: service.description[0]
-                    })),
-                    ...AddonServices.map(service => ({
-                        id: service.title,
-                        label: service.title,
-                        description: service.description[0]
-                    })),
-                    { id: "other", label: "Other", description: "Have something else in mind?" }
-                ]}
-                onOptionSelect={handleOptionSelect}
-            />
+            <div className="no-scrollbar z-10 flex h-full max-h-screen w-full flex-col gap-8 overflow-y-auto">
+                {/* Header */}
+                <div className="w-full">
+                    <h2 className="font-sans text-2xl font-semibold">Contact</h2>
+                </div>
 
-            {/* Grouped */}
-            <div className="flex w-full gap-6">
-                {/* Field/Name */}
-                <TextInput
-                    id="input-name"
-                    label="NAME"
-                    placeholder="John Smith"
-                    className="flex-[75%]"
-                    value={name}
-                    setValue={setName}
+                {/* Field/Project Type */}
+                <StringSelectMenu
+                    id="ssm-project-type"
+                    label="PROJECT TYPE"
+                    className="w-full"
+                    options={[
+                        ...MainServices.map(service => ({
+                            id: service.title,
+                            label: service.title,
+                            description: service.description[0]
+                        })),
+                        ...AddonServices.map(service => ({
+                            id: service.title,
+                            label: service.title,
+                            description: service.description[0]
+                        })),
+                        { id: "other", label: "Other", description: "Have something else in mind?" }
+                    ]}
+                    onOptionSelect={handleOptionSelect}
+                    disabled={isSubmitting}
                 />
 
-                {/* Field/Email */}
+                {/* Grouped */}
+                <div className="flex w-full gap-6">
+                    <TextInput
+                        id="input-name"
+                        label="NAME"
+                        placeholder="John Smith"
+                        className="flex-[75%]"
+                        onTextChange={setName}
+                        disabled={isSubmitting}
+                    />
+
+                    <TextInput
+                        id="input-email"
+                        type="email"
+                        label="EMAIL"
+                        placeholder="johnsmith@gmail.com"
+                        onTextChange={setEmail}
+                        disabled={isSubmitting}
+                    />
+                </div>
+
+                {/* Grouped */}
+                <div className="flex w-full gap-6">
+                    <TextInput
+                        id="input-timeline"
+                        label="TIMELINE"
+                        placeholder="2 weeks"
+                        onTextChange={setTimeline}
+                        disabled={isSubmitting}
+                    />
+
+                    <TextInput
+                        id="input-budget"
+                        label="BUDGET"
+                        placeholder="$1,500 USD"
+                        className="flex-[75%]"
+                        onTextChange={setBudget}
+                        disabled={isSubmitting}
+                    />
+                </div>
+
+                {/* Field/Message */}
                 <TextInput
-                    id="input-email"
-                    type="email"
-                    label="EMAIL"
-                    placeholder="johnsmith@gmail.com"
-                    value={email}
-                    setValue={setEmail}
+                    area
+                    id="input-message"
+                    label="MESSAGE"
+                    placeholder="Hello. I'm interested in one of your finest landing pages for my business."
+                    onTextChange={setMessage}
+                    disabled={isSubmitting}
                 />
+
+                {/* Button/Submit */}
+                <div className="flex flex-col gap-2">
+                    <Button
+                        label="SUBMIT"
+                        variant="accent"
+                        full
+                        disabled={isSubmitting}
+                        waiting={isSubmitting}
+                        onClick={handleSubmit}
+                    >
+                        <ArrowRight className="text-background-primary size-5 stroke-[1.5px]" />
+                    </Button>
+                </div>
             </div>
-
-            {/* Grouped */}
-            <div className="flex w-full gap-6">
-                {/* Field/Timeline */}
-                <TextInput
-                    id="input-timeline"
-                    label="TIMELINE"
-                    placeholder="2 weeks"
-                    value={timeline}
-                    setValue={setTimeline}
-                />
-
-                {/* Field/Budget */}
-                <TextInput
-                    id="input-budget"
-                    label="BUDGET"
-                    placeholder="$1,500 USD"
-                    className="flex-[75%]"
-                    value={budget}
-                    setValue={setBudget}
-                />
-            </div>
-
-            {/* Field/Message */}
-            <TextInput
-                area
-                id="input-message"
-                label="MESSAGE"
-                placeholder="Hello. I'm interested in one of your finest landing pages for my company."
-                value={message}
-                setValue={setMessage}
-            />
-
-            {/* Button/Submit */}
-            <Button label="SUBMIT" variant="accent" full onClick={handleSubmit}>
-                <ArrowRight className="text-background-primary size-5 stroke-[1.5px]" />
-            </Button>
         </div>
     );
 }
 
 export default function Contact() {
     return (
-        <>
-            {/* Section/Contact */}
-            <section id="contact" className="section relative mt-50 items-center overflow-hidden">
+        <section id="contact" className="section relative items-center overflow-hidden">
+            <div className="absolute top-0 left-1/2 -z-10 size-280 -translate-x-1/2 -translate-y-1/2 rounded-full bg-linear-to-b from-white to-transparent opacity-25 blur-[250px]" />
+
+            <div className="mt-50 flex flex-col gap-10">
                 <SectionHeader title="LET'S TALK" description="Your business deserves attention." className="items-center" />
-
-                <div className="relative">
-                    <div className="absolute bottom-0 left-1/2 -z-10 hidden h-155 w-150 -translate-x-1/2 rounded-full bg-linear-to-b from-white opacity-10 blur-3xl md:block" />
-
-                    <ContactServiceForm className="max-w-[500px]" />
-                </div>
-            </section>
-        </>
+                <ContactServiceForm className="max-w-[500px]" />
+            </div>
+        </section>
     );
 }
