@@ -14,9 +14,19 @@ type InputComponentProps = {
     handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     type?: HTMLInputTypeAttribute;
     disabled?: boolean;
+    className?: string;
 };
 
-const TextArea = ({ inputRef, handleFocus, id, value, placeholder, handleChange, disabled }: InputComponentProps) => (
+const TextArea = ({
+    inputRef,
+    handleFocus,
+    id,
+    value,
+    placeholder,
+    handleChange,
+    disabled,
+    className
+}: InputComponentProps) => (
     <textarea
         ref={inputRef as any}
         onFocus={handleFocus}
@@ -26,8 +36,9 @@ const TextArea = ({ inputRef, handleFocus, id, value, placeholder, handleChange,
         onChange={handleChange}
         disabled={disabled}
         className={cn(
-            "placeholder:text-foreground-dim bg-foreground-dimmer focus:border-foreground-primary min-h-40 w-full resize-none rounded-md border border-white/5 px-4 py-3 transition-all duration-300 outline-none focus:min-h-52",
-            disabled && "cursor-not-allowed opacity-50"
+            "placeholder:text-foreground-dim bg-foreground-dimmer focus:border-foreground-primary min-h-40 w-full resize-none rounded-md border border-white/5 px-4 py-3 transition-all duration-100 outline-none focus:min-h-52",
+            disabled && "cursor-not-allowed opacity-50",
+            className
         )}
     />
 );
@@ -40,6 +51,7 @@ const TextInputInternal = ({
     placeholder,
     handleChange,
     disabled,
+    className,
     type
 }: InputComponentProps) => (
     <input
@@ -52,8 +64,9 @@ const TextInputInternal = ({
         onChange={handleChange}
         disabled={disabled}
         className={cn(
-            "placeholder:text-foreground-dim bg-foreground-dimmer focus:border-foreground-primary w-full rounded-md border border-white/5 px-4 py-3 transition-all duration-300 outline-none",
-            disabled && "cursor-not-allowed opacity-50"
+            "placeholder:text-foreground-dim bg-foreground-dimmer focus:border-foreground-primary w-full rounded-md border border-white/5 px-4 py-3 transition-all duration-100 outline-none",
+            disabled && "cursor-not-allowed opacity-50",
+            className
         )}
     />
 );
@@ -110,11 +123,12 @@ export default function TextInput({
         value: textValue || value,
         placeholder,
         handleChange,
-        disabled
+        disabled,
+        className
     };
 
     return (
-        <div {...props} className={cn("flex w-full flex-col gap-1", className)}>
+        <div {...props} className="flex w-full flex-col gap-1">
             <label htmlFor={id} className="text-foreground-dim ml-2 text-xs tracking-tight">
                 {label}
             </label>

@@ -8,11 +8,15 @@ import { AddonServices, MainServices } from "@/constants/services";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import { ComponentProps, useRef, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from "react-toastify";
 
 const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
+const CAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY;
 
 function ContactServiceForm({ className }: ComponentProps<"div">) {
+    const recaptchaRef = useRef<ReCAPTCHA>(null);
+
     const [projectType, setProjectType] = useState("Landing Page");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -21,9 +25,7 @@ function ContactServiceForm({ className }: ComponentProps<"div">) {
     const [message, setMessage] = useState("");
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const formRef = useRef<HTMLDivElement>(null);
-    // useHandleClickOutside(formRef, setIsVisible);
+    const [fieldsRequired, setFieldsRequired] = useState(false);
 
     const handleOptionSelect = (option: StringSelectMenuOption) => {
         setProjectType(option.label);
@@ -33,6 +35,7 @@ function ContactServiceForm({ className }: ComponentProps<"div">) {
         if (isSubmitting) return;
 
         setIsSubmitting(true);
+        setFieldsRequired(false);
 
         // Construct form data
         const formData = { projectType, name, email, timeline, budget, message };
@@ -41,6 +44,37 @@ function ContactServiceForm({ className }: ComponentProps<"div">) {
             if (!WEB3FORMS_KEY) {
                 toast.error("Server configuration error.");
                 throw new Error("Server configuration error: 0x1337");
+            }
+
+            /* Check if the user has completed the reCAPTCHA */
+            const recaptchaToken = recaptchaRef.current?.getValue();
+
+            if (!recaptchaToken) {
+                toast.error("Please complete the reCAPTCHA.");
+                return;
+            }
+
+            // Check if the form data is valid
+            if (!formData.projectType || !formData.name || !formData.email || !formData.timeline || !formData.budget) {
+                setFieldsRequired(true);
+                toast.error("Please fill in all required fields.");
+                return;
+            }
+
+            // Verify the reCAPTCHA
+            const recaptchaRes = await fetch("/api/captcha", {
+                method: "POST",
+                body: JSON.stringify({ token: recaptchaToken })
+            });
+
+            // Parse the response
+            const recaptchaData = await recaptchaRes.json();
+
+            // Check if the reCAPTCHA was successful
+            if (!recaptchaRes.ok || !recaptchaData?.success) {
+                recaptchaRef.current?.reset();
+                toast.error("Failed to verify reCAPTCHA. Please try again.");
+                return;
             }
 
             // Format the message
@@ -82,6 +116,7 @@ function ContactServiceForm({ className }: ComponentProps<"div">) {
                 toast.error("Failed to send message. Please try again.");
             }
         } catch (error) {
+            console.log("Frontend Error: ", error);
             toast.error("A catastrophic error occurred.");
         } finally {
             setIsSubmitting(false);
@@ -104,7 +139,7 @@ function ContactServiceForm({ className }: ComponentProps<"div">) {
                 {/* Field/Project Type */}
                 <StringSelectMenu
                     id="ssm-project-type"
-                    label="PROJECT TYPE"
+                    label="PROJECT TYPE*"
                     className="w-full"
                     options={[
                         ...MainServices.map(service => ({
@@ -127,9 +162,9 @@ function ContactServiceForm({ className }: ComponentProps<"div">) {
                 <div className="flex w-full gap-6">
                     <TextInput
                         id="input-name"
-                        label="NAME"
+                        label="NAME*"
                         placeholder="John Smith"
-                        className="flex-[75%]"
+                        className={cn("flex-[75%]", fieldsRequired && !name.length && "border-red-500")}
                         onTextChange={setName}
                         disabled={isSubmitting}
                     />
@@ -137,8 +172,9 @@ function ContactServiceForm({ className }: ComponentProps<"div">) {
                     <TextInput
                         id="input-email"
                         type="email"
-                        label="EMAIL"
+                        label="EMAIL*"
                         placeholder="johnsmith@gmail.com"
+                        className={fieldsRequired && !email.length ? "border-red-500" : undefined}
                         onTextChange={setEmail}
                         disabled={isSubmitting}
                     />
@@ -148,17 +184,18 @@ function ContactServiceForm({ className }: ComponentProps<"div">) {
                 <div className="flex w-full gap-6">
                     <TextInput
                         id="input-timeline"
-                        label="TIMELINE"
+                        label="TIMELINE*"
                         placeholder="2 weeks"
+                        className={fieldsRequired && !timeline.length ? "border-red-500" : undefined}
                         onTextChange={setTimeline}
                         disabled={isSubmitting}
                     />
 
                     <TextInput
                         id="input-budget"
-                        label="BUDGET"
+                        label="BUDGET*"
                         placeholder="$1,500 USD"
-                        className="flex-[75%]"
+                        className={cn("flex-[75%]", fieldsRequired && !budget.length && "border-red-500")}
                         onTextChange={setBudget}
                         disabled={isSubmitting}
                     />
@@ -168,16 +205,19 @@ function ContactServiceForm({ className }: ComponentProps<"div">) {
                 <TextInput
                     area
                     id="input-message"
-                    label="MESSAGE"
+                    label="MESSAGE (optional)"
                     placeholder="Hello. I'm interested in one of your finest landing pages for my business."
                     onTextChange={setMessage}
                     disabled={isSubmitting}
                 />
 
-                {/* Button/Submit */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col items-center gap-4">
+                    {/* Captcha */}
+                    {CAPTCHA_SITE_KEY && <ReCAPTCHA ref={recaptchaRef} sitekey={CAPTCHA_SITE_KEY} />}
+
+                    {/* Button/Submit */}
                     <Button
-                        label="SUBMIT INQUIRY"
+                        label="SEND INQUIRY"
                         variant="accent"
                         full
                         disabled={isSubmitting}
